@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.thorplatform.ejb3.persistence
+OpenIDE-Module-Localizing-Bundle: com/thorplatform/ejb3/persistence/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

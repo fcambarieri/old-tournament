@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/src/META-INF/services
+END
+com.thorplatform.utils.NumericUtils
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/src/META-INF/services/com.thorplatform.utils.NumericUtils
+END
+com.thorplatform.utils.GuiUtils
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/src/META-INF/services/com.thorplatform.utils.GuiUtils
+END
+com.thorplatform.utils.observer.ClientObservable
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/src/META-INF/services/com.thorplatform.utils.observer.ClientObservable
+END
+com.thorplatform.utils.DateTimeUtils
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/src/META-INF/services/com.thorplatform.utils.DateTimeUtils
+END
+com.thorplatform.utils.observer.ServerObservable
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/src/META-INF/services/com.thorplatform.utils.observer.ServerObservable
+END

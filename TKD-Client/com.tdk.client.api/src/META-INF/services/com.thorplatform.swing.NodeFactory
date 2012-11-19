@@ -1,0 +1,3 @@
+com.tdk.client.personas.internal.PersonaNodeFactory
+com.tdk.client.personas.internal.InstitucionNodeFactory
+com.tdk.client.personas.internal.AlumnoNodeFactory

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.thorplatform.swing
+OpenIDE-Module-Layer: com/thorplatform/swing/layer.xml
+OpenIDE-Module-Localizing-Bundle: com/thorplatform/swing/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.1.0.1
+

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security
+END
+UserController.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/UserController.java
+END
+UserForm.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/UserForm.java
+END
+AccesosController.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/AccesosController.java
+END
+AccesosForm.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/AccesosForm.java
+END
+Bundle.properties
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/Bundle.properties
+END
+UserForm.form
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/UserForm.form
+END
+ConfigurarPermisosController.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/ConfigurarPermisosController.java
+END
+ConfigurarPermisosForm.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/ConfigurarPermisosForm.java
+END
+AccesosForm.form
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/AccesosForm.form
+END
+ConfigurarPermisosForm.form
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/security/ConfigurarPermisosForm.form
+END

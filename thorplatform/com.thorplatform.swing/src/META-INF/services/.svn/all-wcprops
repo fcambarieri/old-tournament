@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/personaladmin/!svn/ver/23/thorplatform/com.thorplatform.swing/src/META-INF/services
+END
+com.thorplatform.swing.SwingBinderFactory
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.SwingBinderFactory
+END
+com.thorplatform.swing.SwingControllerFactory
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.SwingControllerFactory
+END
+com.thorplatform.swing.SwingWaiter
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svnroot/personaladmin/!svn/ver/23/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.SwingWaiter
+END
+com.thorplatform.swing.ClientConfig
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.ClientConfig
+END
+com.thorplatform.swing.NodeBuilderFactory
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.NodeBuilderFactory
+END
+com.thorplatform.swing.actions.NotifierSwingActionListener
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.actions.NotifierSwingActionListener
+END
+com.thorplatform.swing.SwingBinder
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/META-INF/services/com.thorplatform.swing.SwingBinder
+END

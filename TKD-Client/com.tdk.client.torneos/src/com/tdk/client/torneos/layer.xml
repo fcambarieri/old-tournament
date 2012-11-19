@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="com-tdk-client-torneos-ParametrizacionAction.instance"/>
+            <file name="com-tdk-client-torneos-RegistrarCompatidoresTorneoAction.instance"/>
+            <file name="com-tdk-client-torneos-TorneosAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="ParametrizacionAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-tdk-client-torneos-ParametrizacionAction.instance"/>
+            </file>
+            <file name="RegistrarCompatidoresTorneoAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-tdk-client-torneos-RegistrarCompatidoresTorneoAction.instance"/>
+            </file>
+            <file name="TorneosAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-tdk-client-torneos-TorneosAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="ParametrizacionTopComponent.settings" url="ParametrizacionTopComponentSettings.xml"/>
+            <file name="RegistrarCompatidoresTorneoTopComponent.settings" url="RegistrarCompatidoresTorneoTopComponentSettings.xml"/>
+            <file name="TorneosTopComponent.settings" url="TorneosTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="ParametrizacionTopComponent.wstcref" url="ParametrizacionTopComponentWstcref.xml"/>
+                <file name="RegistrarCompatidoresTorneoTopComponent.wstcref" url="RegistrarCompatidoresTorneoTopComponentWstcref.xml"/>
+            </folder>
+            <folder name="explorer">
+                <file name="TorneosTopComponent.wstcref" url="TorneosTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>com.thorplatform.cajo_wrapper</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>gnu.cajo.invoke</package>
+                <package>gnu.cajo.utils</package>
+                <package>gnu.cajo.utils.extra</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/cajo.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/cajo.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

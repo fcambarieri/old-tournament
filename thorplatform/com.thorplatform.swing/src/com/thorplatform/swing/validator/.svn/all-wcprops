@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator
+END
+AbstractSwingValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator/AbstractSwingValidator.java
+END
+StringPropertyValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator/StringPropertyValidator.java
+END
+NumberPropertyValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator/NumberPropertyValidator.java
+END
+AbstractSwingPropertyValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator/AbstractSwingPropertyValidator.java
+END
+RequiredPropertyValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator/RequiredPropertyValidator.java
+END
+SwingValidatorHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.swing/src/com/thorplatform/swing/validator/SwingValidatorHandler.java
+END

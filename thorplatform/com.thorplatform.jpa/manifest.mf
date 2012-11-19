@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.thorplatform.jpa
+OpenIDE-Module-Localizing-Bundle: com/thorplatform/jpa/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

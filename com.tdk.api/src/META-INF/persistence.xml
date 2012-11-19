@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="apiPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>com.tdk.domain.Alumno</class>
+    <class>com.tdk.domain.ContactoPersona</class>
+    <class>com.tdk.domain.Estado</class>
+    <class>com.tdk.domain.Institucion</class>
+    <class>com.tdk.domain.KeywordInstitucion</class>
+    <class>com.tdk.domain.KeywordPersona</class>
+    <class>com.tdk.domain.Persona</class>
+    <class>com.tdk.domain.PersonaFisica</class>
+    <class>com.tdk.domain.Profesor</class>
+    <class>com.tdk.domain.TipoContacto</class>
+    <class>com.tdk.domain.security.Funcionalidad</class>
+    <class>com.tdk.domain.security.FuncionalidadRol</class>
+    <class>com.tdk.domain.security.FuncionalidadUsuario</class>
+    <class>com.tdk.domain.security.KeywordUsuario</class>
+    <class>com.tdk.domain.security.Rol</class>
+    <class>com.tdk.domain.security.Usuario</class>
+    <class>com.tdk.domain.torneo.Categoria</class>
+    <class>com.tdk.domain.torneo.CategoriaForma</class>
+    <class>com.tdk.domain.torneo.CategoriaLucha</class>
+    <class>com.tdk.domain.torneo.Cinturon</class>
+    <class>com.tdk.domain.torneo.Competidor</class>
+    <class>com.tdk.domain.torneo.CompetidorCategoria</class>
+    <class>com.tdk.domain.torneo.CompetidorCategoriaForma</class>
+    <class>com.tdk.domain.torneo.CompetidorCategoriaLucha</class>
+    <class>com.tdk.domain.torneo.EstadoCompetidor</class>
+    <class>com.tdk.domain.torneo.EstadoTorneo</class>
+    <class>com.tdk.domain.torneo.Peso</class>
+    <class>com.tdk.domain.torneo.Torneo</class>
+    <class>com.tdk.domain.torneo.TorneoInstitucion</class>
+    <class>com.tdk.domain.torneo.competencia.Arbitro</class>
+    <class>com.tdk.domain.torneo.competencia.Juez</class>
+    <class>com.tdk.domain.torneo.competencia.Competencia</class>
+    <class>com.tdk.domain.torneo.competencia.LlaveLucha</class>
+    <class>com.tdk.domain.torneo.competencia.Llave</class>
+    <class>com.tdk.domain.torneo.competencia.LlaveForma</class>
+    <class>com.tdk.domain.Numerador</class>
+    <class>com.tdk.domain.torneo.competencia.EstadoCompetencia</class>
+    <properties>
+      
+    </properties>
+  </persistence-unit>
+</persistence>

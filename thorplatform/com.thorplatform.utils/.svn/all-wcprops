@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/personaladmin/!svn/ver/8/thorplatform/com.thorplatform.utils
+END
+manifest.mf
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/manifest.mf
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/personaladmin/!svn/ver/3/thorplatform/com.thorplatform.utils/build.xml
+END
