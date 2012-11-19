@@ -1,0 +1,5 @@
+*~*
+*.orig
+*.class
+*/nbproject/private/
+*/build
