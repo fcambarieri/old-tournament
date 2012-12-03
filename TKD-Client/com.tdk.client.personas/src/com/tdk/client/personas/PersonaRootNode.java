@@ -7,17 +7,13 @@ package com.tdk.client.personas;
 import com.tdk.client.api.ServiceFactory;
 import com.tdk.domain.Persona;
 import com.tdk.domain.PersonaFisica;
-import com.tdk.domain.security.Acceso;
 import com.tdk.services.PersonaServiceRemote;
 import com.tdk.utils.TDKServerException;
 import com.thorplatform.swing.ChoiceRootNode;
 import com.thorplatform.swing.ChoiceRootNodeChildren;
 import com.thorplatform.swing.StrategySearchPattern;
-import com.thorplatform.swing.SwingControllerFactory;
 import com.thorplatform.swing.ValidatorFilter;
-import com.thorplatform.swing.actions.AbstractSwingAction;
 import com.thorplatform.utils.GuiUtils;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
@@ -29,10 +25,12 @@ import org.openide.util.Lookup;
  *
  * @author fernando
  */
-public class PersonaRootNode extends ChoiceRootNode {
+public class PersonaRootNode extends ChoiceRootNode  {
 
     private StrategySearchPattern<? extends Persona> strategySearchPersonas;
+    private Lookup.Result<PersonaFisica> result;
 
+    
     public PersonaRootNode() {
         super(new PersonaRootNodeChildren());
         installActions();
@@ -91,11 +89,17 @@ public class PersonaRootNode extends ChoiceRootNode {
     public Action[] getActions(boolean arg0) {
         return new Action[]{new AgregarPersonaFisicaAction()};
     }
-    
-    
+
 }
 class PersonaRootNodeChildren extends ChoiceRootNodeChildren {
 
+    @Override
+    public Class associateLookup() {
+        return Persona.class;
+    }
+
+    
+    
     @Override
     protected Node[] createNodes(Object arg0) {
         return new Node[]{new PersonaNode((Persona) arg0)};

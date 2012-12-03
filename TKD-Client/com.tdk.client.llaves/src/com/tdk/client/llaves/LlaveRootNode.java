@@ -92,11 +92,18 @@ public class LlaveRootNode extends ChoiceRootNode {
     
     
 }
+
+
 class LlaveRootNodeChildren extends ChoiceRootNodeChildren {
 
     @Override
     protected Node[] createNodes(Object arg0) {
         return new Node[]{new LlaveNode((Llave) arg0)};
+    }
+
+    @Override
+    public Class associateLookup() {
+        return Llave.class;
     }
     
 }

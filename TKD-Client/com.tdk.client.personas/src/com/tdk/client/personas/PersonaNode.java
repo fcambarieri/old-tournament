@@ -18,6 +18,14 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
+import org.openide.util.lookup.Lookups;
+
+
+
+
+
 
 
 
@@ -25,10 +33,10 @@ import org.openide.util.Lookup;
  *
  * @author fernando
  */
-public class PersonaNode extends SwingNode<Persona>{
+public class PersonaNode extends SwingNode<Persona>  {
 
     public PersonaNode(Persona persona) {
-        super(new PersonaNodeChildren(persona), persona);
+        super(new PersonaNodeChildren(persona), persona, Lookups.singleton(persona));
         setIconBaseWithExtension("com/tdk/client/personas/persona-16x16.png");
     }
     
@@ -44,8 +52,6 @@ public class PersonaNode extends SwingNode<Persona>{
         return super.getActions(arg0);
     }
 }
-
-
 
 
 

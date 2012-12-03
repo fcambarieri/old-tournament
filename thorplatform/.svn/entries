@@ -70,6 +70,13 @@ dir
 
 add
 
+com.thorplatform.server.os-wrapper
+dir
+
+
+
+add
+
 com.thorplatform.swing
 dir
 

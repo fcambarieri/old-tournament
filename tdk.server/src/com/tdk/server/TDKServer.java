@@ -35,6 +35,7 @@ public class TDKServer extends AbstractServer {
     public TDKServer() {
         super("TDK Server");
         serverConfig.loadFileProperties("../conf/server.properties"); 
+        jpaConfig.loadFileProperties("conf/hibernate.properties"); 
        
     }
 
@@ -46,14 +47,14 @@ public class TDKServer extends AbstractServer {
 
     @Override
     protected Map getPersisnteceConfiguration() {
-        Map props = new HashMap();
-        props.put("hibernate.dialect", serverConfig.get("database_dialect"));
-        props.put("hibernate.connection.driver_class", serverConfig.get("database_connection_driver_class"));
-        props.put("hibernate.connection.url", serverConfig.get("database_url"));
-        props.put("hibernate.connection.username", serverConfig.get("database_user"));
-        props.put("hibernate.connection.password", serverConfig.get("database_password"));
-        props.put("hibernate.max_fetch_depth", "0");
-        //props.put("hibernate.show_sql", "true");
+        Map props = jpaConfig.getProperties();
+//        props.put("hibernate.dialect", serverConfig.get("database_dialect"));
+//        props.put("hibernate.connection.driver_class", serverConfig.get("database_connection_driver_class"));
+//        props.put("hibernate.connection.url", serverConfig.get("database_url"));
+//        props.put("hibernate.connection.username", serverConfig.get("database_user"));
+//        props.put("hibernate.connection.password", serverConfig.get("database_password"));
+//        props.put("hibernate.max_fetch_depth", "0");
+//        //props.put("hibernate.show_sql", "true");
         return props;
     }
 
@@ -69,7 +70,8 @@ public class TDKServer extends AbstractServer {
 
             @Override
             public Object validate(String username, String password) {
-                Usuario u = jpaLocalServiceFactory.getService(SecurityServiceRemote.class).login(username, password);
+                SecurityServiceRemote service = jpaLocalServiceFactory.getService(SecurityServiceRemote.class);
+                Usuario u = service.login(username, password);
                 //Usuario u = new Usuario();
                 //u.setUserName(username);
                 return u;
@@ -108,5 +110,9 @@ public class TDKServer extends AbstractServer {
         } catch (Exception ex) {
             Logger.getLogger(TDKServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void doStop() {
+        
     }
 }

@@ -106,14 +106,16 @@ public abstract class AbstractSwingAction extends AbstractAction implements Swin
     }
     
     private boolean getMenuAccess(String funcionalidad) {
-        if (getValidatePermisson() != null)
+       if (getValidatePermisson() != null) {
             return getValidatePermisson().getMenuAccess(funcionalidad);
+        }
         return false;
     }
     
     private boolean getAccess(String funcionality, Object access) {
-        if (getValidatePermisson() != null)
+        if (getValidatePermisson() != null) {
             return getValidatePermisson().getAccess(funcionality, access);
+        }
         return false;
     }
 }

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.thorplatform.server.oswrapper
+OpenIDE-Module-Localizing-Bundle: com/thorplatform/server/oswrapper/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -157,10 +157,11 @@ public class LoginController extends SwingModalController {
         private LoginRunnable() {
         }
 
+        @Override
         public void run() {
             try {
                 Thread.sleep(3000L);
-                String server = "//localhost:1198/loginServer";
+                String server = getServerHost();
                 //LoginController.access(LoginController.this, false);
                 //String loginServer, String usuario, String password, String workPlace
                 LoginController.this.getLoginClient().login(server, LoginController.this.userName.get(), LoginController.this.pwd.get(), null);
@@ -173,8 +174,17 @@ public class LoginController extends SwingModalController {
         }
     }
 
-    public static abstract interface Listener {
+    public String getServerHost() {
+        String server = "//localhost:1198/loginServer";
+        String propr = System.getProperty("serverHost");
+        if (propr != null) {
+            server = propr + "/loginServer";
+        }
+        return server;
+    }
+    
+    public static interface Listener {
 
-        public abstract void onInteractionDone(boolean paramBoolean);
+        public void onInteractionDone(boolean paramBoolean);
     }
 }

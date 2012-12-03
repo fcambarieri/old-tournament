@@ -41,6 +41,7 @@
             </module-dependencies>
             <public-packages>
                 <package>com.tdk.client.api</package>
+                <package>com.tdk.client.api.internal</package>
                 <package>com.tdk.domain</package>
                 <package>com.tdk.domain.security</package>
                 <package>com.tdk.domain.torneo</package>

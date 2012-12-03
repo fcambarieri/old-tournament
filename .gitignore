@@ -1,0 +1,16 @@
+*.class
+*.log
+thorplatform/build
+thorplatform/bin
+/com.tdk.api/build/
+/tdk.server/build/
+/com.tdk.api/dist/
+/TKD-Client/com.tdk.client.api/build/
+/TKD-Client/build/
+/TKD-Client/com.tdk.client.nodes/build/
+/TKD-Client/com.tdk.client.llaves/build/
+/TKD-Client/com.tdk.client.personas/build/
+/TKD-Client/com.tdk.client.utils/build/
+/TKD-Client/com.tdk.client.security/build/
+/TKD-Client/com.tdk.client.torneos/build/
+/tdk.server/dist/

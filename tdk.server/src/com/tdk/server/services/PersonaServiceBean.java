@@ -10,7 +10,6 @@ import com.tdk.domain.KeywordPersona;
 import com.tdk.domain.Persona;
 import com.tdk.domain.PersonaFisica;
 import com.tdk.domain.TipoContacto;
-import com.tdk.domain.torneo.Competidor;
 import com.tdk.domain.torneo.TorneoInstitucion;
 import com.tdk.services.PersonaServiceRemote;
 import com.tdk.utils.TDKServerException;

@@ -11,14 +11,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DefaultClientNotyfier implements ClientNotyfier {
 
-    private Map<Class, List<NotifierListener>> listenerMap = new HashMap();
+    private Map<Class, List<NotifierListener>> listenerMap = Collections.synchronizedMap(new HashMap());
 
+    @Override
     public synchronized void addNotifierListener(Class className, NotifierListener listener) {
         List list = (List) this.listenerMap.get(className);
         if (list == null) {
@@ -41,6 +43,7 @@ public class DefaultClientNotyfier implements ClientNotyfier {
         }
     }
 
+    @Override
     public synchronized void fireNotifierListener(NotifierObject notifierObject) {
         synchronized (this.listenerMap) {
             List listeners = (List) this.listenerMap.get(notifierObject.getClassName());

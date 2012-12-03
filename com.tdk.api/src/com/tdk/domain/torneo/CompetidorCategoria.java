@@ -82,7 +82,7 @@ public abstract class CompetidorCategoria implements Serializable {
         this.estadoCompetidor = estadoCompetidor;
     }
 
-    @OneToMany(mappedBy = "competidorCategoria", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "competidorCategoria", /*fetch=FetchType.EAGER,*/ cascade=CascadeType.ALL)
     public List<EstadoCompetidor> getEstados() {
         return estados;
     }

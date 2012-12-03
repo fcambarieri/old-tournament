@@ -146,7 +146,7 @@ public class Competencia implements Serializable {
         this.estadoActual = estadoActual;
     }
 
-    @OneToMany(mappedBy = "competencia", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "competencia", cascade=CascadeType.ALL/*, fetch=FetchType.EAGER*/)
     public List<EstadoCompetencia> getEstados() {
         return estados;
     }

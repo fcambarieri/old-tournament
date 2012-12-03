@@ -1,16 +1,15 @@
 package com.thorplatform.jpa;
 
-import com.thorplatform.notifier.Notifier;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
-public class JPAInvocationHandler
-        implements InvocationHandler {
+public class JPAInvocationHandler implements InvocationHandler {
 
     private static final Logger logger = Logger.getLogger(JPAInvocationHandler.class.getName());
     private JPAService localService;
@@ -18,27 +17,26 @@ public class JPAInvocationHandler
     private EntityManagerFactory entityManagerFactory;
     private static TransactionMonitor monitor = new TransactionMonitor();
 
+    @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         synchronized (monitor) {
-            logger.info("trx: " + getLocalServiceMethodName(method));
+            logger.log(Level.INFO, "trx: {0}", getLocalServiceMethodName(method));
 
             EntityManager em = getEntityManagerFactory().createEntityManager();
             this.localService.setEntityManager(em);
+             Object localObject1 = null;
             try {
-                Object localObject1 = null;
+               
                 if (isTransactional(method)) {
                     localObject1 = transactionalInvokation(proxy, method, args, em);
-
-                    em.close();
-                    em = null;
-                    return localObject1;
+                } else{
+                    localObject1 = nonTranasctionalInvokaion(proxy, method, args);
                 }
-                localObject1 = nonTranasctionalInvokaion(proxy, method, args);
-
-                em.close();
-                em = null;
                 return localObject1;
-            } finally {
+            } catch (Throwable t) {
+                logger.log(Level.SEVERE, "Invocation ".concat(proxy.getClass().getName()), t);
+                return localObject1;
+            }finally {
                 em.close();
                 em = null;
             }
@@ -56,7 +54,7 @@ public class JPAInvocationHandler
             Object result = method.invoke(this.localService, args);
 
             trx.commit();
-            logger.info("Transactional committed: " + getLocalServiceMethodName(method));
+            logger.log(Level.INFO, "Transactional committed: {0}", getLocalServiceMethodName(method));
 
             if (this.localService.getNotifier() != null) {
                 this.localService.getNotifier().notifyAllListener();
@@ -66,13 +64,17 @@ public class JPAInvocationHandler
             if (trx.isActive()) {
                 trx.rollback();
             }
-            ite.getTargetException().printStackTrace();
+            
+            logger.log(Level.SEVERE, "Invocation ".concat(proxy.getClass().getName()), ite);
 
             throw ite.getTargetException();
         } catch (Throwable t) {
             if (trx.isActive()) {
                 trx.rollback();
             }
+            
+            logger.log(Level.SEVERE, "Invocation ", t);
+            
             throw t;
         }
         
@@ -82,7 +84,7 @@ public class JPAInvocationHandler
             throws Throwable {
         Object result = method.invoke(this.localService, args);
 
-        logger.info("NonTransactional committed: " + getLocalServiceMethodName(method));
+        logger.log(Level.INFO, "NonTransactional committed: {0}", getLocalServiceMethodName(method));
 
         return result;
     }

@@ -4,8 +4,7 @@ import com.thorplatform.jpa.JPAServiceFactory;
 import gnu.cajo.utils.extra.TransparentItemProxy;
 import java.util.HashMap;
 
-public class JPARemoteServiceFactory
-        implements JPAServiceFactory {
+public class JPARemoteServiceFactory implements JPAServiceFactory {
 
     private String serverUrl;
     private HashMap<Class, Object> serviceInstanceCache;
@@ -24,6 +23,7 @@ public class JPARemoteServiceFactory
         this.serverUrl = serverUrl;
     }
 
+    @Override
     public <T> T getService(Class<T> serviceClass) {
         try {
             return (T) lookupService(getUrl(serviceClass), serviceClass);

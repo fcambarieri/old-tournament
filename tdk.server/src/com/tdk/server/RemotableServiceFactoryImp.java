@@ -19,9 +19,7 @@ public class RemotableServiceFactoryImp extends RemotableServiceFactory{
 
     @Override
     public List<?> recuperarPermisos(String funcionalidad) {
-        List<Acceso> accesos = getSecurityService().recuperarPermiso(getUsuario(), funcionalidad);
-        return accesos;
-       // return new ArrayList<Acceso>(Arrays.asList(Acceso.values())); 
+        return getSecurityService().recuperarPermiso(getUsuario(), funcionalidad);
     }
     
     private SecurityServiceRemote getSecurityService() {

@@ -8,8 +8,7 @@ import java.util.HashMap;
 import javax.persistence.EntityManagerFactory;
 import org.openide.util.Lookup;
 
-public class JPALocalServiceFactory
-        implements JPAServiceFactory {
+public class JPALocalServiceFactory implements JPAServiceFactory {
 
     private EntityManagerFactory entityManagerFactory;
     private static HashMap<Class, Class> services;
@@ -34,6 +33,7 @@ public class JPALocalServiceFactory
         services.put(serviceClass, implementationClass);
     }
 
+    @Override
     public <T> T getService(Class<T> serviceInterfaceClass) {
         try {
             Class localServiceClass = (Class) services.get(serviceInterfaceClass);

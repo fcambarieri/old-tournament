@@ -6,6 +6,8 @@ package com.thorplatform.swing;
 
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.Lookups;
 
 /**
  *
@@ -20,10 +22,21 @@ public abstract class SwingNode<T> extends AbstractNode {
     }
 
     public SwingNode(Children children, T t) {
-        super(children);
-        this.value = t;
+        this(children, t, Lookups.singleton(t));
     }
 
+    public SwingNode(Children children, T value, Lookup lookup) {
+        super(children, lookup);
+        this.value = value;
+    }
+
+    public SwingNode(T t, Lookup lookup) {
+        super(Children.LEAF, lookup);
+        this.value = t;
+    }
+    
+    
+    
     public T getValue() {
         return value;
     }
