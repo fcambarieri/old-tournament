@@ -206,6 +206,72 @@
                 <package>org.hibernate.proxy.map</package>
                 <package>org.hibernate.proxy.pojo</package>
                 <package>org.hibernate.proxy.pojo.javassist</package>
+                <package>org.hibernate.search</package>
+                <package>org.hibernate.search.analyzer</package>
+                <package>org.hibernate.search.annotations</package>
+                <package>org.hibernate.search.backend</package>
+                <package>org.hibernate.search.backend.configuration.impl</package>
+                <package>org.hibernate.search.backend.impl</package>
+                <package>org.hibernate.search.backend.impl.batch</package>
+                <package>org.hibernate.search.backend.impl.blackhole</package>
+                <package>org.hibernate.search.backend.impl.jgroups</package>
+                <package>org.hibernate.search.backend.impl.jms</package>
+                <package>org.hibernate.search.backend.impl.lucene</package>
+                <package>org.hibernate.search.backend.impl.lucene.overrides</package>
+                <package>org.hibernate.search.backend.impl.lucene.works</package>
+                <package>org.hibernate.search.backend.spi</package>
+                <package>org.hibernate.search.batchindexing</package>
+                <package>org.hibernate.search.batchindexing.impl</package>
+                <package>org.hibernate.search.bridge</package>
+                <package>org.hibernate.search.bridge.builtin</package>
+                <package>org.hibernate.search.bridge.builtin.impl</package>
+                <package>org.hibernate.search.bridge.impl</package>
+                <package>org.hibernate.search.bridge.spi</package>
+                <package>org.hibernate.search.bridge.util.impl</package>
+                <package>org.hibernate.search.cfg</package>
+                <package>org.hibernate.search.cfg.spi</package>
+                <package>org.hibernate.search.engine</package>
+                <package>org.hibernate.search.engine.impl</package>
+                <package>org.hibernate.search.engine.spi</package>
+                <package>org.hibernate.search.exception</package>
+                <package>org.hibernate.search.exception.impl</package>
+                <package>org.hibernate.search.filter</package>
+                <package>org.hibernate.search.filter.impl</package>
+                <package>org.hibernate.search.impl</package>
+                <package>org.hibernate.search.indexes</package>
+                <package>org.hibernate.search.indexes.impl</package>
+                <package>org.hibernate.search.indexes.interceptor</package>
+                <package>org.hibernate.search.indexes.serialization.avro.impl</package>
+                <package>org.hibernate.search.indexes.serialization.impl</package>
+                <package>org.hibernate.search.indexes.serialization.javaserialization.impl</package>
+                <package>org.hibernate.search.indexes.serialization.spi</package>
+                <package>org.hibernate.search.indexes.spi</package>
+                <package>org.hibernate.search.jmx</package>
+                <package>org.hibernate.search.jmx.impl</package>
+                <package>org.hibernate.search.query</package>
+                <package>org.hibernate.search.query.collector.impl</package>
+                <package>org.hibernate.search.query.dsl</package>
+                <package>org.hibernate.search.query.dsl.impl</package>
+                <package>org.hibernate.search.query.engine</package>
+                <package>org.hibernate.search.query.engine.impl</package>
+                <package>org.hibernate.search.query.engine.spi</package>
+                <package>org.hibernate.search.query.facet</package>
+                <package>org.hibernate.search.query.fieldcache.impl</package>
+                <package>org.hibernate.search.reader.impl</package>
+                <package>org.hibernate.search.sandbox.standalone</package>
+                <package>org.hibernate.search.spi</package>
+                <package>org.hibernate.search.spi.internals</package>
+                <package>org.hibernate.search.stat</package>
+                <package>org.hibernate.search.stat.impl</package>
+                <package>org.hibernate.search.stat.spi</package>
+                <package>org.hibernate.search.store</package>
+                <package>org.hibernate.search.store.impl</package>
+                <package>org.hibernate.search.store.optimization</package>
+                <package>org.hibernate.search.store.optimization.impl</package>
+                <package>org.hibernate.search.util</package>
+                <package>org.hibernate.search.util.configuration.impl</package>
+                <package>org.hibernate.search.util.impl</package>
+                <package>org.hibernate.search.util.logging.impl</package>
                 <package>org.hibernate.secure.internal</package>
                 <package>org.hibernate.service</package>
                 <package>org.hibernate.service.classloading.internal</package>
@@ -276,6 +342,10 @@
             <class-path-extension>
                 <runtime-relative-path>ext/antlr-2.7.7.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/antlr-2.7.7.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/hibernate-search-engine-4.1.1.Final.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hibernate-search-engine-4.1.1.Final.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/hibernate-core-4.1.8.Final.jar</runtime-relative-path>

@@ -17,6 +17,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Indexed;
 
 /**
  *
@@ -24,7 +26,9 @@ import javax.persistence.Transient;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@Indexed
 public abstract class Persona implements Serializable {
+    
     
     private Long id;
     private List<ContactoPersona> contactos;
@@ -35,6 +39,7 @@ public abstract class Persona implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @DocumentId
     public Long getId() {
         return id;
     }

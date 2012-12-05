@@ -12,16 +12,27 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.DateBridge;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Resolution;
+import org.hibernate.search.annotations.Store;
 
 /**
  *
  * @author fernando
  */
 @Entity
+@Indexed
 public class PersonaFisica extends Persona implements java.io.Serializable {
     
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String nombre;
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String apellido;
+    @DateBridge(resolution = Resolution.DAY)
     private Date fechaNacimiento;
     private Sexo sexo;
     

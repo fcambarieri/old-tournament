@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.0
+Created-By: 10.0-b22 (Sun Microsystems Inc.)
+OpenIDE-Module-Public-Packages: com.thorplatform.server.*, com.thorpla
+ tform.server.api.*
+OpenIDE-Module-Module-Dependencies: com.thorplatform.cajo_wrapper > 1.
+ 0, com.thorplatform.ejb3.persistence > 1.0, com.thorplatform.hibernat
+ ewrapper > 1.0, com.thorplatform.jpa > 1.0, com.thorplatform.login > 
+ 1.0, com.thorplatform.server.oswrapper > 1.0, org.openide.actions > 6
+ .7.0.1, org.openide.util > 7.12.0.1
+OpenIDE-Module-Java-Dependencies: Java > 1.5
+OpenIDE-Module-Implementation-Version: 080602
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: com.thorplatform.server
+OpenIDE-Module-Localizing-Bundle: com/thorplatform/server/Bundle.prope
+ rties
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
+

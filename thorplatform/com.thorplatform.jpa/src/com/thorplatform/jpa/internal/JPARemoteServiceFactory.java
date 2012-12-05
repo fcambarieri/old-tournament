@@ -3,6 +3,7 @@ package com.thorplatform.jpa.internal;
 import com.thorplatform.jpa.JPAServiceFactory;
 import gnu.cajo.utils.extra.TransparentItemProxy;
 import java.util.HashMap;
+import javax.persistence.EntityManagerFactory;
 
 public class JPARemoteServiceFactory implements JPAServiceFactory {
 

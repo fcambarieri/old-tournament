@@ -23,6 +23,7 @@ public abstract class AbstractServer {
     private String serverName;
     protected boolean isSecure;
     protected Log logger = LogFactory.getLog(this.getClass().getName());
+    protected EntityManagerFactory entityManagerFactory;
 
     protected AbstractServer(String serverName) {
         this.serverName = serverName;
@@ -30,11 +31,11 @@ public abstract class AbstractServer {
         this.jpaConfig = Lookup.getDefault().lookup(JPAConfig.class);
     }
 
-    private void configurePersistenceUnit() {
+    protected void configurePersistenceUnit() {
         this.jpaLocalServiceFactory = new JPALocalServiceFactory();
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(getPersisnteceUnitName(), getPersisnteceConfiguration());
-        this.jpaLocalServiceFactory.setEntityManagerFactory(emf);
+        this.entityManagerFactory = Persistence.createEntityManagerFactory(getPersisnteceUnitName(), getPersisnteceConfiguration());
+        this.jpaLocalServiceFactory.setEntityManagerFactory(entityManagerFactory);
     }
 
     protected void configureRMIServer() throws NumberFormatException, UnknownHostException {

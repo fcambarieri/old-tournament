@@ -17,6 +17,7 @@ import com.tdk.services.PersonaServiceRemote;
 import com.tdk.services.SecurityServiceRemote;
 import com.tdk.services.TorneoServiceRemote;
 import com.tdk.services.UtilServiceRemote;
+import com.thorplatform.jpa.JPALocalServiceFactory;
 import com.thorplatform.server.AbstractServer;
 import com.thorplatform.server.RemotableServiceFactory;
 import com.thorplatform.server.api.AbstractLoginServer;
@@ -24,6 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -111,8 +116,19 @@ public class TDKServer extends AbstractServer {
             Logger.getLogger(TDKServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void doStop() {
-        
+
+    @Override
+    protected void configurePersistenceUnit() {
+        try {
+            super.configurePersistenceUnit();
+            EntityManager em = entityManagerFactory.createEntityManager();
+            FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+            fullTextEntityManager.createIndexer().startAndWait();
+        } catch (InterruptedException ex) {
+            logger.error(ex);
+            stopServer();
+        }
     }
+    
+    
 }
