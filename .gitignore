@@ -1,7 +1,124 @@
 *.class
 *.log
-thorplatform/build
-thorplatform/bin
+# NetBeans specific #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+*/nbproject/private/
+*/build/
+*/nbbuild/
+*/dist/
+*/nbdist/
+*/nbactions.xml
+*/nb-configuration.xml
+
+#thorplatform
+thorplatform/com.thorplatform.cajo_wrapper/nbproject/private/
+thorplatform/com.thorplatform.cajo_wrapper/build/
+thorplatform/com.thorplatform.cajo_wrapper/nbbuild/
+thorplatform/com.thorplatform.cajo_wrapper/dist/
+thorplatform/com.thorplatform.cajo_wrapper/nbdist/
+thorplatform/com.thorplatform.cajo_wrapper/nbactions.xml
+thorplatform/com.thorplatform.cajo_wrapper/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.ejb3.persistence
+thorplatform/com.thorplatform.ejb3.persistence/nbproject/private/
+thorplatform/com.thorplatform.ejb3.persistence/build/
+thorplatform/com.thorplatform.ejb3.persistence/nbbuild/
+thorplatform/com.thorplatform.ejb3.persistence/dist/
+thorplatform/com.thorplatform.ejb3.persistence/nbdist/
+thorplatform/com.thorplatform.ejb3.persistence/nbactions.xml
+thorplatform/com.thorplatform.ejb3.persistence/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.jpa
+thorplatform/com.thorplatform.jpa/nbproject/private/
+thorplatform/com.thorplatform.jpa/build/
+thorplatform/com.thorplatform.jpa/nbbuild/
+thorplatform/com.thorplatform.jpa/dist/
+thorplatform/com.thorplatform.jpa/nbdist/
+thorplatform/com.thorplatform.jpa/nbactions.xml
+thorplatform/com.thorplatform.jpa/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.login
+thorplatform/com.thorplatform.login/nbproject/private/
+thorplatform/com.thorplatform.login/build/
+thorplatform/com.thorplatform.login/nbbuild/
+thorplatform/com.thorplatform.login/dist/
+thorplatform/com.thorplatform.login/nbdist/
+thorplatform/com.thorplatform.login/nbactions.xml
+thorplatform/com.thorplatform.login/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.notifier
+thorplatform/com.thorplatform.notifier/nbproject/private/
+thorplatform/com.thorplatform.notifier/build/
+thorplatform/com.thorplatform.notifier/nbbuild/
+thorplatform/com.thorplatform.notifier/dist/
+thorplatform/com.thorplatform.notifier/nbdist/
+thorplatform/com.thorplatform.notifier/nbactions.xml
+thorplatform/com.thorplatform.notifier/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.server
+thorplatform/com.thorplatform.server/nbproject/private/
+thorplatform/com.thorplatform.server/build/
+thorplatform/com.thorplatform.server/nbbuild/
+thorplatform/com.thorplatform.server/dist/
+thorplatform/com.thorplatform.server/nbdist/
+thorplatform/com.thorplatform.server/nbactions.xml
+thorplatform/com.thorplatform.server/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.server.os-wrapper
+thorplatform/com.thorplatform.server.os-wrapper/nbproject/private/
+thorplatform/com.thorplatform.server.os-wrapper/build/
+thorplatform/com.thorplatform.server.os-wrapper/nbbuild/
+thorplatform/com.thorplatform.server.os-wrapper/dist/
+thorplatform/com.thorplatform.server.os-wrapper/nbdist/
+thorplatform/com.thorplatform.server.os-wrapper/nbactions.xml
+thorplatform/com.thorplatform.server.os-wrapper/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.swing
+thorplatform/com.thorplatform.swing/nbproject/private/
+thorplatform/com.thorplatform.swing/build/
+thorplatform/com.thorplatform.swing/nbbuild/
+thorplatform/com.thorplatform.swing/dist/
+thorplatform/com.thorplatform.swing/nbdist/
+thorplatform/com.thorplatform.swing/nbactions.xml
+thorplatform/com.thorplatform.swing/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.swingx
+thorplatform/com.thorplatform.swingx/nbproject/private/
+thorplatform/com.thorplatform.swingx/build/
+thorplatform/com.thorplatform.swingx/nbbuild/
+thorplatform/com.thorplatform.swingx/dist/
+thorplatform/com.thorplatform.swingx/nbdist/
+thorplatform/com.thorplatform.swingx/nbactions.xml
+thorplatform/com.thorplatform.swingx/nb-configuration.xml
+
+
+#thorplatform -> com.thorplatform.utils
+thorplatform/com.thorplatform.utils/nbproject/private/
+thorplatform/com.thorplatform.utils/build/
+thorplatform/com.thorplatform.utils/nbbuild/
+thorplatform/com.thorplatform.utils/dist/
+thorplatform/com.thorplatform.utils/nbdist/
+thorplatform/com.thorplatform.utils/nbactions.xml
+thorplatform/com.thorplatform.utils/nb-configuration.xml
+
+#thorplatform -> com.thorplatform.ejb3.persistence
+thorplatform/com.thorplatform.ejb3.persistence/nbproject/private/
+thorplatform/com.thorplatform.ejb3.persistence/build/
+thorplatform/com.thorplatform.ejb3.persistence/nbbuild/
+thorplatform/com.thorplatform.ejb3.persistence/dist/
+thorplatform/com.thorplatform.ejb3.persistence/nbdist/
+thorplatform/com.thorplatform.ejb3.persistence/nbactions.xml
+thorplatform/com.thorplatform.ejb3.persistence/nb-configuration.xml
+
+thorplatform/*/build
+thorplatform/*/bin
 /com.tdk.api/build/
 /tdk.server/build/
 /com.tdk.api/dist/
