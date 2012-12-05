@@ -72,6 +72,10 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         registerKeywordPersona(persona);
         getNotifier().mark(Persona.class, NotifierEvent.UDPDATE, persona);
     }
+    
+    public List<Persona> searchPersona(String patron) {
+        return null;
+    }
 
     @JPATransactional(IsTransactional.NOT_TRANSACTIONAL)
     public List<Persona> listarPersona(String patron) {
