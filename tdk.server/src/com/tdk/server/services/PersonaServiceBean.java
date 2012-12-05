@@ -21,6 +21,9 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 /**
  *
@@ -41,8 +44,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
     }
 
     public void anRegisterKeywordPersona(Long idPersona) {
-        Query query = getEntityManager().createQuery("delete from KeywordPersona kp " +
-                "where kp.persona.id = :idPersona");
+        Query query = getEntityManager().createQuery("delete from KeywordPersona kp "
+                + "where kp.persona.id = :idPersona");
         query.setParameter("idPersona", idPersona);
         query.executeUpdate();
     }
@@ -72,89 +75,101 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         registerKeywordPersona(persona);
         getNotifier().mark(Persona.class, NotifierEvent.UDPDATE, persona);
     }
-    
+
     public List<Persona> searchPersona(String patron) {
-        return null;
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(getEntityManager());
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(PersonaFisica.class).get();
+        org.apache.lucene.search.Query query = qb
+                .keyword()
+                .onFields("nombre", "apellido")
+                .matching(patron)
+                .createQuery();
+        javax.persistence.Query persistenceQuery =
+                fullTextEntityManager.createFullTextQuery(query, PersonaFisica.class);
+        // execute search
+        List result = persistenceQuery.getResultList();
+        return result;
     }
 
-    @JPATransactional(IsTransactional.NOT_TRANSACTIONAL)
+    //@JPATransactional(IsTransactional.NOT_TRANSACTIONAL)
     public List<Persona> listarPersona(String patron) {
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp " +
-                "where lower(kp.keyword) like :patron");
-        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
-        Long count = (Long) query.getSingleResult();
-        if (count > MAX_RESULT) {
-            throw new TDKServerException("<HTML>Demacioados resultados, filtre con más datos</HTML>");
-        } else if (count == 0) {
-            throw new TDKServerException("<HTML>No hay resultados</HTML>");
-        }
-
-        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp " +
-                "where lower(kp.keyword) like :patron");
-        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
-        return query.getResultList();
+        return searchPersona(patron);
+//        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp "
+//                + "where lower(kp.keyword) like :patron");
+//        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
+//        Long count = (Long) query.getSingleResult();
+//        if (count > MAX_RESULT) {
+//            throw new TDKServerException("<HTML>Demacioados resultados, filtre con más datos</HTML>");
+//        } else if (count == 0) {
+//            throw new TDKServerException("<HTML>No hay resultados</HTML>");
+//        }
+//
+//        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp "
+//                + "where lower(kp.keyword) like :patron");
+//        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
+//        return query.getResultList();
     }
 
     /* public TipoDocumentacion crearTipoDocumento(TipoDocumentacion tipoDocumento) {
-    TipoDocumentacion other = recuperarTipoDocumentacionPorDescripcion(tipoDocumento.getDescripcion());
-    if (other != null)
-    throw new TDKServerException("Ya existe un tipo de documentación con esa descripción");
-    getEntityManager().persist(tipoDocumento);
-    return tipoDocumento;
-    }
+     TipoDocumentacion other = recuperarTipoDocumentacionPorDescripcion(tipoDocumento.getDescripcion());
+     if (other != null)
+     throw new TDKServerException("Ya existe un tipo de documentación con esa descripción");
+     getEntityManager().persist(tipoDocumento);
+     return tipoDocumento;
+     }
     
-    public TipoDocumentacion recuperarTipoDocumentacion(Long idTipoDocumento) {
-    return getEntityManager().find(TipoDocumentacion.class, idTipoDocumento);
-    }
+     public TipoDocumentacion recuperarTipoDocumentacion(Long idTipoDocumento) {
+     return getEntityManager().find(TipoDocumentacion.class, idTipoDocumento);
+     }
     
-    public void modificarTipoDocumentacion(TipoDocumentacion tipoDocumentacion) {
-    TipoDocumentacion other = recuperarTipoDocumentacionPorDescripcion(tipoDocumentacion.getDescripcion());
-    if (other != null && other.equals(tipoDocumentacion))
-    throw new TDKServerException("Ya existe un tipo de documentación con esa descripción");
-    getEntityManager().merge(tipoDocumentacion);
-    }
+     public void modificarTipoDocumentacion(TipoDocumentacion tipoDocumentacion) {
+     TipoDocumentacion other = recuperarTipoDocumentacionPorDescripcion(tipoDocumentacion.getDescripcion());
+     if (other != null && other.equals(tipoDocumentacion))
+     throw new TDKServerException("Ya existe un tipo de documentación con esa descripción");
+     getEntityManager().merge(tipoDocumentacion);
+     }
     
-    public List<TipoDocumentacion> listarTipoDocumentacion(String patron) {
-    if (patron != null && patron.trim().length() == 0)             
-    throw new TDKServerException("Ingrese un filtro");
+     public List<TipoDocumentacion> listarTipoDocumentacion(String patron) {
+     if (patron != null && patron.trim().length() == 0)             
+     throw new TDKServerException("Ingrese un filtro");
     
-    Query query = getEntityManager().createQuery("select t from TipoDocumentacion t " +
-    "where lower(t.descripcion) like :patron");
-    query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
-    return query.getResultList();    
-    }
+     Query query = getEntityManager().createQuery("select t from TipoDocumentacion t " +
+     "where lower(t.descripcion) like :patron");
+     query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
+     return query.getResultList();    
+     }
     
-    public TipoDocumentacion recuperarTipoDocumentacionPorDescripcion(String descripcion) {
-    Query query = getEntityManager().createQuery("select t from TipoDocumentacion t where " +
-    "lower(t.descripcion) = :patron");
-    query.setParameter("patron", descripcion.trim().toLowerCase());
-    TipoDocumentacion tipoDocumentacion = null;
-    try {
-    tipoDocumentacion = (TipoDocumentacion) query.getSingleResult();
-    } catch (NoResultException ex) {
-    return null;
-    }
-    return tipoDocumentacion;   
-    }
+     public TipoDocumentacion recuperarTipoDocumentacionPorDescripcion(String descripcion) {
+     Query query = getEntityManager().createQuery("select t from TipoDocumentacion t where " +
+     "lower(t.descripcion) = :patron");
+     query.setParameter("patron", descripcion.trim().toLowerCase());
+     TipoDocumentacion tipoDocumentacion = null;
+     try {
+     tipoDocumentacion = (TipoDocumentacion) query.getSingleResult();
+     } catch (NoResultException ex) {
+     return null;
+     }
+     return tipoDocumentacion;   
+     }
     
-    public PuntoVenta crearPuntoVenta(PuntoVenta puntoVento) {
-    throw new UnsupportedOperationException("Not supported yet.");
-    }
+     public PuntoVenta crearPuntoVenta(PuntoVenta puntoVento) {
+     throw new UnsupportedOperationException("Not supported yet.");
+     }
     
-    public PuntoVenta recuperarPuntoVenta(Long idPuntoVenta) {
-    throw new UnsupportedOperationException("Not supported yet.");
-    }
+     public PuntoVenta recuperarPuntoVenta(Long idPuntoVenta) {
+     throw new UnsupportedOperationException("Not supported yet.");
+     }
     
-    public void modificarPuntoVenta(PuntoVenta puntoVenta) {
-    throw new UnsupportedOperationException("Not supported yet.");
-    }
+     public void modificarPuntoVenta(PuntoVenta puntoVenta) {
+     throw new UnsupportedOperationException("Not supported yet.");
+     }
     
-    public List<PuntoVenta> listarPuntoVenta(String patron) {
-    throw new UnsupportedOperationException("Not supported yet.");
-    }
+     public List<PuntoVenta> listarPuntoVenta(String patron) {
+     throw new UnsupportedOperationException("Not supported yet.");
+     }
      */
     public TipoContacto crearTipoContacto(TipoContacto tipoContacto) {
         TipoContacto other = recuperarTipoContactoPorDescripcion(tipoContacto.getDescripcion());
@@ -173,8 +188,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        Query query = getEntityManager().createQuery("select t from TipoContacto t " +
-                "where lower(t.descripcion) like :patron");
+        Query query = getEntityManager().createQuery("select t from TipoContacto t "
+                + "where lower(t.descripcion) like :patron");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         return query.getResultList();
     }
@@ -188,8 +203,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
     }
 
     public TipoContacto recuperarTipoContactoPorDescripcion(String descripcion) {
-        Query query = getEntityManager().createQuery("select t from TipoContacto t where " +
-                "lower(t.descripcion) = :patron");
+        Query query = getEntityManager().createQuery("select t from TipoContacto t where "
+                + "lower(t.descripcion) = :patron");
         query.setParameter("patron", descripcion.trim().toLowerCase());
         TipoContacto tipoContacto = null;
         try {
@@ -214,8 +229,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , Institucion it " +
-                "where lower(kp.keyword) like :patron AND it.id = kp.persona.id");
+        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , Institucion it "
+                + "where lower(kp.keyword) like :patron AND it.id = kp.persona.id");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         Long count = (Long) query.getSingleResult();
         if (count > MAX_RESULT) {
@@ -224,8 +239,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
             throw new TDKServerException("<HTML>No hay resultados</HTML>");
         }
 
-        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp, Institucion it " +
-                "where lower(kp.keyword) like :patron and it.id = kp.persona.id");
+        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp, Institucion it "
+                + "where lower(kp.keyword) like :patron and it.id = kp.persona.id");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         return query.getResultList();
     }
@@ -241,8 +256,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
     }
 
     public Institucion recuperarInstitucionPorNombre(String nombre) {
-        Query query = getEntityManager().createQuery("select i from Institucion i where " +
-                "lower(i.nombre) = :patron");
+        Query query = getEntityManager().createQuery("select i from Institucion i where "
+                + "lower(i.nombre) = :patron");
         query.setParameter("patron", nombre.trim().toLowerCase());
         Institucion institucion = null;
         try {
@@ -260,7 +275,7 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         }
 
         attached = getEntityManager().find(Institucion.class, institucion.getId());
-        
+
         updateList(attached.getCompetidores(), institucion.getCompetidores());
         updateList(attached.getContactos(), institucion.getContactos());
         updateList(attached.getProfesores(), institucion.getProfesores());
@@ -276,8 +291,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , PersonaFisica pf " +
-                "where lower(kp.keyword) like :patron AND pf.id = kp.persona.id");
+        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , PersonaFisica pf "
+                + "where lower(kp.keyword) like :patron AND pf.id = kp.persona.id");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         Long count = (Long) query.getSingleResult();
         if (count > MAX_RESULT) {
@@ -286,8 +301,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
             throw new TDKServerException("<HTML>No hay resultados</HTML>");
         }
 
-        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp, PersonaFisica pf " +
-                "where lower(kp.keyword) like :patron and pf.id = kp.persona.id");
+        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp, PersonaFisica pf "
+                + "where lower(kp.keyword) like :patron and pf.id = kp.persona.id");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         return query.getResultList();
     }
@@ -296,8 +311,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , PersonaFisica pf , Alumno al " +
-                "where lower(kp.keyword) like :patron AND pf.id = kp.persona.id AND al.personaFisica.id = pf.id AND al.institucion.id = :idInstitucion");
+        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , PersonaFisica pf , Alumno al "
+                + "where lower(kp.keyword) like :patron AND pf.id = kp.persona.id AND al.personaFisica.id = pf.id AND al.institucion.id = :idInstitucion");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         query.setParameter("idInstitucion", idInstitucion);
         Long count = (Long) query.getSingleResult();
@@ -307,19 +322,19 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
             throw new TDKServerException("<HTML>No hay resultados</HTML>");
         }
 
-        query = getEntityManager().createQuery("Select distinct al From KeywordPersona kp, PersonaFisica pf , Alumno al " +
-                "where lower(kp.keyword) like :patron and pf.id = kp.persona.id " +
-                "AND al.personaFisica.id = pf.id AND al.institucion.id = :idInstitucion");
+        query = getEntityManager().createQuery("Select distinct al From KeywordPersona kp, PersonaFisica pf , Alumno al "
+                + "where lower(kp.keyword) like :patron and pf.id = kp.persona.id "
+                + "AND al.personaFisica.id = pf.id AND al.institucion.id = :idInstitucion");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         query.setParameter("idInstitucion", idInstitucion);
         return query.getResultList();
     }
 
     public List<TorneoInstitucion> listarInstitucionPorTorneo(Long idTorneo, String patron) {
-        Query query = getEntityManager().createQuery("Select distinct ti From TorneoInstitucion ti, KeywordPersona kp, PersonaFisica pf , Alumno al " +
-                "where lower(kp.keyword) like :patron and pf.id = kp.persona.id " +
-                "AND al.personaFisica.id = pf.id AND al.institucion.id = ti.institucion.id " +
-                "AND ti.torneo.id = :idTorneo");
+        Query query = getEntityManager().createQuery("Select distinct ti From TorneoInstitucion ti, KeywordPersona kp, PersonaFisica pf , Alumno al "
+                + "where lower(kp.keyword) like :patron and pf.id = kp.persona.id "
+                + "AND al.personaFisica.id = pf.id AND al.institucion.id = ti.institucion.id "
+                + "AND ti.torneo.id = :idTorneo");
         query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
         query.setParameter("idTorneo", idTorneo);
         return query.getResultList();
@@ -334,8 +349,8 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
 
     public boolean existeInstitucionEnTorneo(TorneoInstitucion torneoInstitucion) {
 
-        Query query = getEntityManager().createQuery("Select ti From TorneoInstitucion ti " +
-                "where ti.torneo.id = :idTorneo and ti.institucion = :idInstitucion");
+        Query query = getEntityManager().createQuery("Select ti From TorneoInstitucion ti "
+                + "where ti.torneo.id = :idTorneo and ti.institucion = :idInstitucion");
         query.setParameter("idTorneo", torneoInstitucion.getTorneo().getId());
         query.setParameter("idInstitucion", torneoInstitucion.getInstitucion().getId());
 
@@ -350,7 +365,4 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
 
         return true;
     }
-
-   
 }
-
