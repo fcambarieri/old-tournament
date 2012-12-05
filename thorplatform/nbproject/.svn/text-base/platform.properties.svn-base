@@ -1,5 +1,0 @@
-cluster.path=\
-    ${nbplatform.active.dir}/nb:\
-    ${nbplatform.active.dir}/platform
-disabled.modules=
-nbplatform.active=netbeans
