@@ -11,12 +11,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
 
 /**
  *
  * @author fernando
  */
 @Entity
+@Indexed
 public class Institucion extends Persona implements Serializable {
     
     private String nombre;
@@ -47,7 +53,8 @@ public class Institucion extends Persona implements Serializable {
     public String toString() {
         return getNombre();
     }
-
+    
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     public String getNombre() {
         return nombre;
     }

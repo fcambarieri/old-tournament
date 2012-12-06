@@ -76,7 +76,7 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         getNotifier().mark(Persona.class, NotifierEvent.UDPDATE, persona);
     }
 
-    public List<Persona> searchPersona(String patron) {
+    public List<? extends Persona> searchPersona(String patron) {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(getEntityManager());
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(PersonaFisica.class).get();
         org.apache.lucene.search.Query query = qb
@@ -96,7 +96,7 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        return searchPersona(patron);
+        return (List<Persona>) searchPersona(patron);
 //        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp "
 //                + "where lower(kp.keyword) like :patron");
 //        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
@@ -291,20 +291,21 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         if (patron != null && patron.trim().length() == 0) {
             throw new TDKServerException("Ingrese un filtro");
         }
-        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , PersonaFisica pf "
-                + "where lower(kp.keyword) like :patron AND pf.id = kp.persona.id");
-        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
-        Long count = (Long) query.getSingleResult();
-        if (count > MAX_RESULT) {
-            throw new TDKServerException("<HTML>Demacioados resultados, filtre con más datos</HTML>");
-        } else if (count == 0) {
-            throw new TDKServerException("<HTML>No hay resultados</HTML>");
-        }
-
-        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp, PersonaFisica pf "
-                + "where lower(kp.keyword) like :patron and pf.id = kp.persona.id");
-        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
-        return query.getResultList();
+        return (List<PersonaFisica>)searchPersona(patron);
+//        Query query = getEntityManager().createQuery("select count(distinct kp.persona) from KeywordPersona kp , PersonaFisica pf "
+//                + "where lower(kp.keyword) like :patron AND pf.id = kp.persona.id");
+//        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
+//        Long count = (Long) query.getSingleResult();
+//        if (count > MAX_RESULT) {
+//            throw new TDKServerException("<HTML>Demacioados resultados, filtre con más datos</HTML>");
+//        } else if (count == 0) {
+//            throw new TDKServerException("<HTML>No hay resultados</HTML>");
+//        }
+//
+//        query = getEntityManager().createQuery("Select distinct kp.persona From KeywordPersona kp, PersonaFisica pf "
+//                + "where lower(kp.keyword) like :patron and pf.id = kp.persona.id");
+//        query.setParameter("patron", STARTING_WITH_WILDCARD + patron.toLowerCase() + STARTING_WITH_WILDCARD);
+//        return query.getResultList();
     }
 
     public List<Alumno> listarAlumnosPorInstitucion(Long idInstitucion, String patron) {
