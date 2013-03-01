@@ -11,6 +11,9 @@ import com.thorplatform.notifier.client.ClientNotyfier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -23,11 +26,13 @@ import org.openide.util.Lookup;
  */
 public class NotifierImpl implements Notifier {
 
-    private static final Logger logger = Logger.getLogger(NotifierImpl.class.getName());
-    private ExecutorService executor = Executors.newFixedThreadPool(30);
-    private List<NotifierObject> notiferObjectsList = Collections.synchronizedList(new ArrayList<NotifierObject>());
-    private ClientNotyfier clients = Lookup.getDefault().lookup(ClientNotyfier.class);
-
+//    private static final Logger logger = Logger.getLogger(NotifierImpl.class.getName());
+//    private ExecutorService executor = Executors.newFixedThreadPool(30);
+//    private List<NotifierObject> notiferObjectsList = Collections.synchronizedList(new ArrayList<NotifierObject>());
+//    private ClientNotyfier clients = Lookup.getDefault().lookup(ClientNotyfier.class);
+    //private ConcurrentLinkedQueue<NotifierObject> marks = new ConcurrentLinkedQueue<NotifierObject>();
+    private BlockingQueue<NotifierObject> marks = new ArrayBlockingQueue<NotifierObject>(20);
+    
     @Override
     public synchronized void mark(Class className) {
         mark(className, null);
@@ -41,36 +46,58 @@ public class NotifierImpl implements Notifier {
     @Override
     public synchronized void mark(Class className, NotifierEvent event, Object object) {
         NotifierObject no = new NotifierObject(event, className, object);
-        if (!this.notiferObjectsList.contains(no)) {
-            this.notiferObjectsList.add(no);
-            this.logger.info("Mark on:" + className.getName());
-        } else {
-            this.logger.info("Mark " + className.getName() + " allready exists!");
-        }
+        marks.add(no);
+//        if (!this.notiferObjectsList.contains(no)) {
+//            this.notiferObjectsList.add(no);
+//            this.logger.info("Mark on:" + className.getName());
+//        } else {
+//            this.logger.info("Mark " + className.getName() + " allready exists!");
+//        }
     }
 
     @Override
     public void notifyAllListener() {
-        if (clients == null) {
-            logger.info("ClientNotyfier does not been implemented!");
-            return;
+//        if (clients == null) {
+//            logger.info("ClientNotyfier does not been implemented!");
+//            return;
+//        }
+//        try {
+//            executor.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        for (NotifierObject no : notiferObjectsList) {
+//                            clients.fireNotifierListener(no);
+//                        }
+//                    } catch (Throwable e) {
+//                        logger.log(Level.SEVERE, "Notifing clients", e);
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            logger.log(Level.SEVERE, "Error al notificar", e);
+//        } finally {
+//        }
+    }
+}
+
+class NotifierExecutor implements Runnable {
+
+    private ConcurrentLinkedQueue<NotifierObject> marks;
+
+    public NotifierExecutor(ConcurrentLinkedQueue<NotifierObject> marks) {
+        this.marks = marks;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                NotifierObject mark = marks.poll();
+                
+            } catch (Exception e) {
+            }
         }
-        try {
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        for (NotifierObject no : notiferObjectsList) {
-                            clients.fireNotifierListener(no);
-                        }
-                    } catch (Throwable e) {
-                        logger.log(Level.SEVERE, "Notifing clients", e);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error al notificar", e);
-        } finally {
-        }
+
     }
 }
