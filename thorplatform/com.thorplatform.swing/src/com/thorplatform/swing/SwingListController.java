@@ -86,10 +86,10 @@ public abstract class SwingListController<T> extends SwingController {
     private void quitarAction() {
         if (propertySelected.get() != null) {
             T objectSelected = propertySelected.get();
-            listProperty.remove(objectSelected);
-            quitarAction(objectSelected);
+            if (quitarAction(objectSelected)) {
+                listProperty.remove(objectSelected);    
+            }
         }
-            
     }
 
     @Override
@@ -123,7 +123,10 @@ public abstract class SwingListController<T> extends SwingController {
     
     protected abstract T editarAction(T objectSelected);
     
-    protected abstract void quitarAction(T objectSelected);
+    /**
+     *@return true if it has to be deleted from the list
+     */
+    protected abstract boolean quitarAction(T objectSelected);
 
     public SwingControllerChangeEvent getSwingControllerChangeEvent() {
         return swingControllerChangeEvent;
@@ -132,5 +135,5 @@ public abstract class SwingListController<T> extends SwingController {
     public void setSwingControllerChangeEvent(SwingControllerChangeEvent swingControllerChangeEvent) {
         this.swingControllerChangeEvent = swingControllerChangeEvent;
     }
-    
+   
 }

@@ -5,9 +5,7 @@
 package com.tdk.client.personas.institucion;
 
 import com.tdk.client.api.ServiceFactory;
-import com.tdk.client.personas.AgregarPersonaFisicaAction;
 import com.tdk.client.personas.ModificarPersonaFisicaAction;
-import com.tdk.client.personas.PersonaFisicaController;
 import com.tdk.client.personas.PersonaNode;
 import com.tdk.client.personas.PersonaRootNode;
 import com.tdk.domain.Alumno;
@@ -20,7 +18,6 @@ import com.thorplatform.swing.DelegatingListModel;
 import com.thorplatform.swing.Property;
 import com.thorplatform.swing.StrategySearchPattern;
 import com.thorplatform.swing.SwingControllerChangeEvent;
-import com.thorplatform.swing.SwingControllerFactory;
 import com.thorplatform.swing.SwingListController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -152,6 +149,8 @@ public class AlumnosController extends SwingListController<Alumno> {
     }
 
     @Override
-    protected void quitarAction(Alumno alumno) {
+    protected boolean quitarAction(Alumno alumno) {
+        //TODO: Eliminar Alumno
+        return true;
     }
 }

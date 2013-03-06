@@ -50,7 +50,8 @@ public class InstitucionTorneoListController extends SwingListController<TorneoI
     }
 
     @Override
-    protected void quitarAction(TorneoInstitucion arg0) {
+    protected boolean quitarAction(TorneoInstitucion arg0) {
+        return true;
     }
 
     @Override

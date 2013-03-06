@@ -21,7 +21,9 @@ import com.tdk.domain.torneo.TorneoInstitucion;
 import com.tdk.services.TorneoServiceRemote;
 import com.tdk.services.UtilServiceRemote;
 import com.tdk.utils.TDKServerException;
+import com.thorplatform.jpa.IsTransactional;
 import com.thorplatform.jpa.JPAService;
+import com.thorplatform.jpa.JPATransactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -249,6 +251,7 @@ public class TorneoServiceBean extends JPAService implements TorneoServiceRemote
         getEntityManager().merge(categoriaLucha);
     }
 
+    @JPATransactional(IsTransactional.NOT_TRANSACTIONAL)
     public List<CategoriaLucha> listarCategoriasLucha(String descripcion) {
         Query query = getEntityManager().createQuery("Select c from CategoriaLucha c " +
                 "where lower(c.descripcion) like :param");

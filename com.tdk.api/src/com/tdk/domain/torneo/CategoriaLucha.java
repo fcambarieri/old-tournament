@@ -68,7 +68,7 @@ public class CategoriaLucha extends Categoria implements Serializable {
     }
 
     
-    @OneToMany(mappedBy = "categoriaLucha", cascade=CascadeType.ALL/*, fetch=FetchType.EAGER*/)
+    @OneToMany(mappedBy = "categoriaLucha", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     public List<Peso> getPesos() {
         return pesos;
     }

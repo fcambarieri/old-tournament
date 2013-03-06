@@ -31,7 +31,6 @@ public class ParametrizacionForm extends javax.swing.JPanel {
         jMenu2 = new javax.swing.JMenu();
         jXTaskPane1 = new org.jdesktop.swingx.JXTaskPane();
         pnlOpciones = new javax.swing.JPanel();
-        tbpOpciones = new javax.swing.JTabbedPane();
         pnlCinturones = new javax.swing.JPanel();
         pnlCategoriaFormas = new javax.swing.JPanel();
         pnlCategoriaLuchas = new javax.swing.JPanel();
@@ -44,14 +43,13 @@ public class ParametrizacionForm extends javax.swing.JPanel {
 
         pnlOpciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlOpciones.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 13), java.awt.SystemColor.activeCaption)); // NOI18N
 
+        pnlCinturones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlCinturones.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), java.awt.SystemColor.activeCaption)); // NOI18N
         pnlCinturones.setLayout(new java.awt.BorderLayout());
-        tbpOpciones.addTab(org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlCinturones.TabConstraints.tabTitle"), pnlCinturones); // NOI18N
 
+        pnlCategoriaFormas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlCategoriaFormas.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), java.awt.SystemColor.activeCaption)); // NOI18N
         pnlCategoriaFormas.setLayout(new java.awt.BorderLayout());
-        tbpOpciones.addTab(org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlCategoriaFormas.TabConstraints.tabTitle"), pnlCategoriaFormas); // NOI18N
 
         pnlCategoriaLuchas.setLayout(new java.awt.BorderLayout());
-        tbpOpciones.addTab(org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlCategoriaLuchas.TabConstraints.tabTitle"), pnlCategoriaLuchas); // NOI18N
 
         javax.swing.GroupLayout pnlOpcionesLayout = new javax.swing.GroupLayout(pnlOpciones);
         pnlOpciones.setLayout(pnlOpcionesLayout);
@@ -59,13 +57,22 @@ public class ParametrizacionForm extends javax.swing.JPanel {
             pnlOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlOpcionesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tbpOpciones, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
+                .addGroup(pnlOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlOpcionesLayout.createSequentialGroup()
+                        .addComponent(pnlCinturones, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlCategoriaFormas, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE))
+                    .addComponent(pnlCategoriaLuchas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlOpcionesLayout.setVerticalGroup(
             pnlOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlOpcionesLayout.createSequentialGroup()
-                .addComponent(tbpOpciones, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addGroup(pnlOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlCinturones, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                    .addComponent(pnlCategoriaFormas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlCategoriaLuchas, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -85,6 +92,8 @@ public class ParametrizacionForm extends javax.swing.JPanel {
                 .addComponent(pnlOpciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        pnlOpciones.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ParametrizacionForm.class, "ParametrizacionForm.pnlOpciones.AccessibleContext.accessibleName")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -97,7 +106,6 @@ public class ParametrizacionForm extends javax.swing.JPanel {
     public javax.swing.JPanel pnlCategoriaLuchas;
     public javax.swing.JPanel pnlCinturones;
     public javax.swing.JPanel pnlOpciones;
-    public javax.swing.JTabbedPane tbpOpciones;
     // End of variables declaration//GEN-END:variables
 
 }

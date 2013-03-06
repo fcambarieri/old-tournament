@@ -17,6 +17,7 @@ import com.thorplatform.swing.actions.NotifierSwingActionListener;
 import com.thorplatform.swing.actions.SwingActionListener;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 import javax.swing.JPanel;
 import org.openide.util.Lookup;
 
@@ -83,10 +84,13 @@ public class ParametrizacionController extends SwingController implements SwingC
     public void initialice() {
         cinturonController.getListProperty().assignData(getTorneoService().listarCinturones("%"));   
         categoriasFormasController.getTableList().assignData(getTorneoService().listarCategoriasForma("%"));
-        for(CategoriaLucha cl : getTorneoService().listarCategoriasLucha("%")) {
-            categoriasLuchasController.categoriasLuchas.add(cl, cl.getPesos());
+        categoriasLuchasController.categoriasLuchas.clear();
+        List<CategoriaLucha> categorias = getTorneoService().listarCategoriasLucha("%");
+        if (categorias != null && !categorias.isEmpty()) {
+            for(CategoriaLucha cl : categorias) {
+                categoriasLuchasController.categoriasLuchas.add(cl, cl.getPesos());
+            }    
         }
-        
     }
 
     public void notifyEvent(PropertyChangeEvent evt) {

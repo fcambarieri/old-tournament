@@ -136,6 +136,8 @@ public class ProfesoresListController extends SwingListController<Profesor> {
     }
 
     @Override
-    protected void quitarAction(Profesor profesor) {
+    protected boolean quitarAction(Profesor profesor) {
+        //TODO: Eliminar al profesor
+        return true;
     }
 }

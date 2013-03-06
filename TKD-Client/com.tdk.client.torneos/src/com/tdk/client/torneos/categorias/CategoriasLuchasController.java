@@ -158,7 +158,7 @@ public class CategoriasLuchasController extends SwingController {
             try {
                 CategoriaLucha categoria = controller.crearCategoriaLucha();
                 categoria = getTorneoService().crearCategoriaLuchas(categoria);
-                categoriasLuchas.add(categoria, new ArrayList<Peso>());
+                categoriasLuchas.add(categoria, categoria.getPesos());
                 error = false;
             } catch (Throwable ex) {
                 getGuiUtils().warnnig(ex, TDKServerException.class);
