@@ -60,9 +60,9 @@ class CompetidorNodeChildren extends Children.Keys {
         Integer key = (Integer) arg0;
         if (key.equals(CINTURON)) {
             node = new CinturonNode(competidor.getCinturon());
-        } else if (key.equals(LUCHA)) {
+        } else if (key.equals(LUCHA) && competidor.getCompetidorCategoriaLucha() != null) {
             node = new CompetidorCategoriaNode("Lucha: ", competidor.getCompetidorCategoriaLucha(), "com/tdk/client/torneos/combate-16x16.png");
-        } else if (key.equals(FORMA)) {
+        } else if (key.equals(FORMA) && competidor.getCompetidorCategoriaForma() != null) {
             node = new CompetidorCategoriaNode("Forma: ", competidor.getCompetidorCategoriaForma(), "com/tdk/client/torneos/formas-16x16.png");
         }
 

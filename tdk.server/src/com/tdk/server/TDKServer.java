@@ -17,18 +17,15 @@ import com.tdk.services.PersonaServiceRemote;
 import com.tdk.services.SecurityServiceRemote;
 import com.tdk.services.TorneoServiceRemote;
 import com.tdk.services.UtilServiceRemote;
-import com.thorplatform.jpa.JPALocalServiceFactory;
 import com.thorplatform.server.AbstractServer;
 import com.thorplatform.server.RemotableServiceFactory;
 import com.thorplatform.server.api.AbstractLoginServer;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
-import org.openide.util.Exceptions;
 
 /**
  *

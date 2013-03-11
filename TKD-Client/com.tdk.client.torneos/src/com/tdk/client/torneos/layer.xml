@@ -9,6 +9,21 @@
         </folder>
     </folder>
     <folder name="Menu">
+        <folder name="Herramientas">
+            <folder name="Configuración">
+                <folder name="Seguridad">
+                    <file name="com-tdk-client-security-FuncionalidadesAction.instance"/>
+                    <file name="com-tdk-client-security-RolesAction.instance"/>
+                    <file name="com-tdk-client-security-UsuariosAction.instance"/>
+                </folder>
+                <file name="com-tdk-client-torneos-ParametrizacionAction.instance"/>
+            </folder>
+            <file name="Seguridad_hidden"/>
+            <file name="com-tdk-client-torneos-ParametrizacionAction.instance_hidden"/>
+        </folder>
+        <folder name="Inicio">
+            <file name="com-tdk-client-torneos-GlobalOpenTournament.shadow_hidden"/>
+        </folder>
         <folder name="Window">
             <file name="ParametrizacionAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-tdk-client-torneos-ParametrizacionAction.instance"/>

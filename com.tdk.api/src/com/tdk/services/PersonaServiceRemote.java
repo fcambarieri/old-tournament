@@ -54,4 +54,6 @@ public interface PersonaServiceRemote {
     
     public List<Alumno> listarAlumnosPorInstitucion(Long idInstitucion, String patron);
     
+    public Alumno crearAlumno(Alumno a);
+    
 }

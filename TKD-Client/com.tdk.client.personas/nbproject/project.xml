@@ -112,7 +112,10 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>com.tdk.client.personas</package>
+                <package>com.tdk.client.personas.institucion</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

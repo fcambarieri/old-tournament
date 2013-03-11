@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
+import org.openide.util.Exceptions;
 import org.openide.util.Utilities;
 
 /**
@@ -21,9 +22,15 @@ public abstract class SwingModalController extends SwingController {
     private boolean modalResult;
     
     private void onAcceptModalDialog() {
-        acceptModalDialog();
-        modalResult = true;
-        modalDialog.setVisible(false);
+        boolean continueAction = false;
+        try {
+            continueAction = acceptModalDialog();
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+            getGuiUtils().notificationError(ex);
+        }
+        modalResult = continueAction;
+        modalDialog.setVisible(!continueAction);
     }
     
     private void onCancelModalDialog() {
@@ -81,7 +88,11 @@ public abstract class SwingModalController extends SwingController {
         getForm().registerKeyboardAction(escListener, stroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
     
-    protected void acceptModalDialog() {
+    /**
+     * Reescribir este método para cambiar el comportamiento de showModal
+     */
+    protected boolean acceptModalDialog() throws Exception {
+        return true;
     }
     
     protected void cancelModalDialog() {

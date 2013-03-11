@@ -124,6 +124,10 @@ public class EstadoController<T extends Estado, E> extends SwingController imple
         return tipoEstadoSelected.get();
     }
     
+     public void setTipoEstado(E estado) {
+        tipoEstadoSelected.set(estado);
+    }
+    
     public Date getFechaDesde() {
         return getUtilService().getDiaHora();
     }

@@ -5,6 +5,7 @@
 package com.tdk.client.torneos.competidor;
 
 import com.tdk.client.api.ServiceFactory;
+import com.tdk.client.personas.institucion.AlumnoRootNode;
 import com.tdk.client.utils.EstadoController;
 import com.tdk.domain.Alumno;
 import com.tdk.domain.Institucion;
@@ -77,6 +78,7 @@ public class CompetidorController extends SwingModalController implements SwingC
     private NodeFactory<Alumno> alumnoNodeFactory = null;
     private NodeFactory<Institucion> institucionNodeFactory = null;
     private NodeFactory<Torneo> torneoNodeFactory = null;
+    AlumnoRootNode crn = null;
 
     @Override
     protected JButton getAcceptButton() {
@@ -160,7 +162,8 @@ public class CompetidorController extends SwingModalController implements SwingC
             }
         };
 
-        ChoiceRootNode crn = alumnoNodeFactory.createRootNode(strategyAlumno);
+        //ChoiceRootNode crn = alumnoNodeFactory.createRootNode(strategyAlumno);
+        crn = new AlumnoRootNode(strategyAlumno);
         crn.setValidatorFilter(new ValidatorFilter() {
 
             public boolean validate(String arg0) {
@@ -218,10 +221,12 @@ public class CompetidorController extends SwingModalController implements SwingC
     private void cleanLucha() {
         categoriaLuchaSelected.set(null);
         pesoSelected.set(null);
+        estadoLuchaController.setTipoEstado(null);
     }
 
     private void cleanForma() {
         categoriaFormaSelected.set(null);
+        estadoFormaController.setTipoEstado(null);
     }
 
     private void installValidators() {
@@ -287,6 +292,10 @@ public class CompetidorController extends SwingModalController implements SwingC
         form.cboPeso.setEnabled(enabled);
         if (!enabled) {
             cleanLucha();
+        } else {
+            if (estadoLuchaController.getTipoEstado() == null) {
+                estadoLuchaController.setTipoEstado(TipoEstadoCompetidor.ACTIVO);  
+            }
         }
     }
 
@@ -294,6 +303,10 @@ public class CompetidorController extends SwingModalController implements SwingC
         form.cboCategoriaForma.setEnabled(enabled);
         if (!enabled) {
             cleanForma();
+        } else {
+            if (estadoFormaController.getTipoEstado() == null) {
+                estadoFormaController.setTipoEstado(TipoEstadoCompetidor.ACTIVO);    
+            }
         }
     }
 
@@ -314,7 +327,6 @@ public class CompetidorController extends SwingModalController implements SwingC
     }
 
     public Competidor crearCompetidor() {
-        Competidor c = new Competidor();
         return modificarCompetidor(new Competidor());
     }
 
@@ -368,6 +380,8 @@ public class CompetidorController extends SwingModalController implements SwingC
 
     public void setInstitucion(Institucion institucion) {
         institucionNode.set(institucionNodeFactory.createNode(institucion));
+        crn.setInstitucion(institucion);
+        
     }
 
     public void notifyEvent(PropertyChangeEvent evt) {
@@ -420,4 +434,23 @@ public class CompetidorController extends SwingModalController implements SwingC
         }
         return new Integer(age);
     }
+
+    @Override
+    protected boolean acceptModalDialog() throws Exception {
+        //return super.acceptModalDialog(); //To change body of generated methods, choose Tools | Templates.
+         //Competidor competidor = crearCompetidor();
+         competidor = getTorneoService().crearCompetidor(crearCompetidor());
+         if (competidor == null) {
+             throw new TDKServerException("No se pudo crear al competidor verifique los datos");
+         }
+         //agregarCompetidor(competidor);
+         return true;
+    }
+    
+    private Competidor competidor;
+    
+    public Competidor getCompetidorCreado() {
+        return competidor;
+    }
+    
 }

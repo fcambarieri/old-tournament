@@ -17,6 +17,7 @@ import com.thorplatform.jpa.IsTransactional;
 import com.thorplatform.jpa.JPAService;
 import com.thorplatform.jpa.JPATransactional;
 import com.thorplatform.notifier.NotifierEvent;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -79,11 +80,15 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
     public List<? extends Persona> searchPersona(String patron) {
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(getEntityManager());
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(PersonaFisica.class).get();
-        org.apache.lucene.search.Query query = qb
-                .keyword()
-                .onFields("nombre", "apellido")
-                .matching(patron)
-                .createQuery();
+        org.apache.lucene.search.Query query;
+        query = qb
+        .keyword()
+        //                  .fuzzy()
+        //                    .withThreshold( .5f )
+        //                    .withPrefixLength( 1 )
+        .onFields("nombre", "apellido")
+        .matching(patron)
+        .createQuery();
         javax.persistence.Query persistenceQuery =
                 fullTextEntityManager.createFullTextQuery(query, PersonaFisica.class);
         // execute search
@@ -362,8 +367,25 @@ public class PersonaServiceBean extends JPAService implements PersonaServiceRemo
         } catch (NoResultException ex) {
             return false;
         }
-
-
         return true;
+    }
+    
+    public Alumno crearAlumno(Alumno a) {
+        Institucion institucionAttached = recuperarInstitucion(a.getInstitucion().getId(), true);
+        boolean found = false;
+        Iterator<Alumno> alumnos = institucionAttached.getCompetidores().iterator();
+        while(found && alumnos.hasNext()) {
+            Alumno it = alumnos.next();
+            found = it.getPersonaFisica().equals(a.getPersonaFisica());
+        }
+        if (found) {
+            throw new TDKServerException("<HTML>La pesona ya esta registrada en la institución</HTML>");
+        }
+        
+        institucionAttached.getCompetidores().add(a);
+        
+        getEntityManager().persist(a);
+        
+        return a;
     }
 }

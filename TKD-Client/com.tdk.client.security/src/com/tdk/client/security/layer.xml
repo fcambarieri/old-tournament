@@ -64,12 +64,12 @@
         </folder>
     </folder>
     <folder name="Toolbars">
-        <folder name="Paciente">
+<!--        <folder name="Paciente">
             <file name="com-tdk-client-llaves-PrintToolBarAction.instance">
                 <attr name="position" intvalue="100"/>
             </file>
 
-        </folder>
+        </folder>-->
        <file name="Standard.xml" url="Standard.xml"/>
     </folder>
     <folder name="Windows2">

@@ -35,7 +35,8 @@ public class JPAInvocationHandler implements InvocationHandler {
                 return localObject1;
             } catch (Throwable t) {
                 logger.log(Level.SEVERE, "Invocation ".concat(proxy.getClass().getName()), t);
-                return localObject1;
+                //return localObject1;
+                throw t;
             }finally {
                 em.close();
                 em = null;
