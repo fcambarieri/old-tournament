@@ -54,7 +54,7 @@
         <file name="GoTo_hidden"/>
         <file name="Edit_hidden"/>
         <file name="Help_hidden"/>
-        <file name="Tools_hidden"/>
+        <!--<file name="Tools_hidden"/>-->
         <file name="Toolbars_hidden"/>
         <folder name="Toolbars">
             <attr name="position" intvalue="400"/>

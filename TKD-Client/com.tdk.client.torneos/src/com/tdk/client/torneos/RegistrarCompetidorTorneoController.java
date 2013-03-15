@@ -37,6 +37,8 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
@@ -64,6 +66,7 @@ public class RegistrarCompetidorTorneoController extends SwingController {
     private boolean permisoAlta = false;
     private boolean permisoEdicion = false;
     private boolean permisoEliminar = false;
+    private DelegatingTreeTableModel<TorneoInstitucion, Competidor> treeModel = null;
 
     @Override
     protected JPanel getForm() {
@@ -91,7 +94,7 @@ public class RegistrarCompetidorTorneoController extends SwingController {
         form.xtreetblCompetidores.setClosedIcon(institucionIcon);
         form.xtreetblCompetidores.setLeafIcon(competidorIcon);
 
-        DelegatingTreeTableModel<TorneoInstitucion, Competidor> treeModel = new DelegatingTreeTableModel<TorneoInstitucion, Competidor>();
+        treeModel = new DelegatingTreeTableModel<TorneoInstitucion, Competidor>();
         treeModel.setColumnNames(new String[]{"Institucion", "Cinturon", "Sexo", "Categoria Lucha", "Categoria Forma"});
         treeModel.setColumnClasses(new Class[]{AbstractTreeTableModel.hierarchicalColumnClass, String.class, String.class, String.class, String.class});
         treeModel.setCellValueProvider(new DelegatingTreeTableModel.CellValueProvider() {
@@ -149,8 +152,6 @@ public class RegistrarCompetidorTorneoController extends SwingController {
         ;
         });
         
-       // form.xtreetblCompetidores.setF
-
         treeModel.setDebug(true);
 
         form.cboTorneo.setModel(new DelegatingComboBoxModel<Torneo>(torneos.getList()));
@@ -284,8 +285,8 @@ public class RegistrarCompetidorTorneoController extends SwingController {
     protected void onPresentationModelChange(PropertyChangeEvent evt) {
         if (evt.getSource() == torneoSelected && torneoSelected.get() != null) {
             listarInstitucionCompatidores("%");
-        } else if (evt.getSource() == instituciones) {
-            setEnabledBotonesDeEdicion(instituciones.getMap().size() > 0);
+        } else if (evt.getPropertyName() == "competidor") {
+            setEnabledBotonesDeEdicion(competidorSelected.get() != null);
         }
     }
 
@@ -295,25 +296,20 @@ public class RegistrarCompetidorTorneoController extends SwingController {
     }
 
     public void listarInstitucionCompatidores(String patron) {
+        Map<Institucion, List<Competidor>> competidoreRegistrados = new HashMap<Institucion, List<Competidor>>();
         try {
 
             List<InstitucionCompetidorDTO> competidoresDTO = getTorneoService().listarInstitucionCompetidorDTOPorTorneo(torneoSelected.get().getId(), patron);
-
-            Map<Institucion, List<Competidor>> competidoreRegistrados = new HashMap<Institucion, List<Competidor>>();
 
             if (competidoresDTO != null) {
                 for (InstitucionCompetidorDTO dto : competidoresDTO) {
                     competidoreRegistrados.put(dto.getInstitucion(), dto.getCompetidores());
                 }
             }
-
-
-            instituciones.setMap(competidoreRegistrados);
-
         } catch (Throwable ex) {
-            ex.printStackTrace();
             getGuiUtils().warnnig(ex, TDKServerException.class);
         }
+        instituciones.setMap(competidoreRegistrados);
     }
 
     private void editarAction() {
@@ -330,6 +326,11 @@ public class RegistrarCompetidorTorneoController extends SwingController {
                     try {
                         competidor = controller.modificarCompetidor(competidor);
                         getTorneoService().modificarCompetidor(competidor);
+                        List<Competidor> competidores = treeModel.getTreeList().get(competidor.getAlumno().getInstitucion());
+                        int index = competidores.indexOf(competidor);
+                        competidores.remove(index);
+                        treeModel.getTreeList().get(competidor.getAlumno().getInstitucion()).add(index, competidor);
+                        treeModel.fireBuildTreeTableModel();
                         competidorSelected.set(competidor);
                         form.xtreetblCompetidores.repaint();
 
@@ -337,8 +338,6 @@ public class RegistrarCompetidorTorneoController extends SwingController {
                     } catch (Throwable ex) {
                         getGuiUtils().warnnig(ex, TDKServerException.class);
                     }
-
-
                 }
             } else {
                 getGuiUtils().warnnig("Seleccione un competidor");

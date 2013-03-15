@@ -5,6 +5,7 @@
 package com.tdk.server.services;
 
 import com.tdk.domain.torneo.CategoriaForma;
+import com.tdk.domain.torneo.CategoriaLucha;
 import com.tdk.domain.torneo.Cinturon;
 import com.tdk.domain.torneo.Competidor;
 import com.tdk.domain.torneo.Torneo;
@@ -152,6 +153,31 @@ public class CompetenciaServiceBean extends JPAService implements CompetenciaSer
         }
 
         return other;
+    }
+    
+     public Llave crearLlave(Llave llave, List<Competidor> competidores) {
+
+        if (competidores == null || competidores.isEmpty()) {
+            throw new TDKServerException("No hay competidores para esta llave");
+        }
+    
+        return convertListTollave(competidores, llave);
+    }
+    
+     public LlaveLucha crearLlaveLucha(Cinturon cinturon, CategoriaLucha categoria, Torneo torneo) {
+        List<Competidor> competidores = getTorneoService().listarCompetidoresLucha(cinturon.getId(), categoria.getId(), torneo.getId());
+
+        if (competidores == null || competidores.isEmpty()) {
+            throw new TDKServerException("No hay competidores para esta llave");
+        }
+        LlaveLucha llave = new LlaveLucha();
+        llave.setCinturon(cinturon);
+        llave.setCategoria(categoria);
+        llave.setTorneo(torneo);
+
+        competidores = CalcBitInverso.orderList(competidores);
+
+        return (LlaveLucha) convertListTollave(competidores, llave);
     }
 
     public LlaveForma crearLlaveForma(Cinturon cinturon, CategoriaForma categoria, Torneo torneo) {

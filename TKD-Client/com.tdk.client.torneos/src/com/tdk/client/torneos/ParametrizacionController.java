@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.tdk.client.torneos;
 
 import com.tdk.client.api.ServiceFactory;
@@ -29,13 +28,12 @@ public class ParametrizacionController extends SwingController implements SwingC
 
     private ParametrizacionForm form = new ParametrizacionForm();
     private SwingControllerFactory swingFactory = Lookup.getDefault().lookup(SwingControllerFactory.class);
-    
     //Controllers
     private CinturonesController cinturonController = null;
-    private CategoriasFormasController categoriasFormasController = null; 
+    private CategoriasFormasController categoriasFormasController = null;
     private CategoriasLuchasController categoriasLuchasController = null;
     private NotifierSwingActionListener notifierActionListener;
-    
+
     @Override
     protected JPanel getForm() {
         return form;
@@ -55,13 +53,13 @@ public class ParametrizacionController extends SwingController implements SwingC
     private void configureView() {
         cinturonController = swingFactory.createController(CinturonesController.class);
         form.pnlCinturones.add(cinturonController.getPanel(), BorderLayout.CENTER);
-        
+
         categoriasFormasController = swingFactory.createController(CategoriasFormasController.class);
         form.pnlCategoriaFormas.add(categoriasFormasController.getPanel(), BorderLayout.CENTER);
-        
+
         categoriasLuchasController = swingFactory.createController(CategoriasLuchasController.class);
         form.pnlCategoriaLuchas.add(categoriasLuchasController.getPanel(), BorderLayout.CENTER);
-        
+
         notifierActionListener = Lookup.getDefault().lookup(NotifierSwingActionListener.class);
         notifierActionListener.addSwingActionListener(new SwingActionListener() {
             public void setIsLogin(boolean isLogin) {
@@ -70,7 +68,7 @@ public class ParametrizacionController extends SwingController implements SwingC
                 }
             }
         });
-        
+
     }
 
     private void installActions() {
@@ -80,17 +78,21 @@ public class ParametrizacionController extends SwingController implements SwingC
         ServiceFactory sf = Lookup.getDefault().lookup(ServiceFactory.class);
         return sf.getService(TorneoServiceRemote.class);
     }
-    
+
     public void initialice() {
-        cinturonController.getListProperty().assignData(getTorneoService().listarCinturones("%"));   
-        categoriasFormasController.getTableList().assignData(getTorneoService().listarCategoriasForma("%"));
-        categoriasLuchasController.categoriasLuchas.clear();
-        List<CategoriaLucha> categorias = getTorneoService().listarCategoriasLucha("%");
-        if (categorias != null && !categorias.isEmpty()) {
-            for(CategoriaLucha cl : categorias) {
-                categoriasLuchasController.categoriasLuchas.add(cl, cl.getPesos());
-            }    
+        try {
+            cinturonController.getListProperty().assignData(getTorneoService().listarCinturones("%"));
+            categoriasFormasController.getTableList().assignData(getTorneoService().listarCategoriasForma("%"));
+            categoriasLuchasController.categoriasLuchas.clear();
+            List<CategoriaLucha> categorias = getTorneoService().listarCategoriasLucha("%");
+            if (categorias != null && !categorias.isEmpty()) {
+                for (CategoriaLucha cl : categorias) {
+                    categoriasLuchasController.categoriasLuchas.add(cl, cl.getPesos());
+                }
+            }
+        } catch (Exception e) {
         }
+
     }
 
     public void notifyEvent(PropertyChangeEvent evt) {

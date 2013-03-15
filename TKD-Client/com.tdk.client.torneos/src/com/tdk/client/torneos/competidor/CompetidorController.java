@@ -79,6 +79,7 @@ public class CompetidorController extends SwingModalController implements SwingC
     private NodeFactory<Institucion> institucionNodeFactory = null;
     private NodeFactory<Torneo> torneoNodeFactory = null;
     AlumnoRootNode crn = null;
+    private boolean edition = false;
 
     @Override
     protected JButton getAcceptButton() {
@@ -406,6 +407,7 @@ public class CompetidorController extends SwingModalController implements SwingC
         setCompetenciaForma(competidor.getCompetidorCategoriaForma());
         setCompetenciaLucha(competidor.getCompetidorCategoriaLucha());
         
+        edition = true;
     }
     
     public void setCompetenciaLucha(CompetidorCategoriaLucha ccl) {
@@ -439,6 +441,9 @@ public class CompetidorController extends SwingModalController implements SwingC
     protected boolean acceptModalDialog() throws Exception {
         //return super.acceptModalDialog(); //To change body of generated methods, choose Tools | Templates.
          //Competidor competidor = crearCompetidor();
+         if (edition) {
+             return true;
+         } 
          competidor = getTorneoService().crearCompetidor(crearCompetidor());
          if (competidor == null) {
              throw new TDKServerException("No se pudo crear al competidor verifique los datos");

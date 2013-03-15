@@ -131,3 +131,4 @@ thorplatform/*/bin
 /TKD-Client/com.tdk.client.security/build/
 /TKD-Client/com.tdk.client.torneos/build/
 /tdk.server/dist/
+/TKD-Client/com.tdk.client.config/nbproject/private/

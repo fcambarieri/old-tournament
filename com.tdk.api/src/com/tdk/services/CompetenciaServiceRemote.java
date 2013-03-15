@@ -6,7 +6,9 @@
 package com.tdk.services;
 
 import com.tdk.domain.torneo.CategoriaForma;
+import com.tdk.domain.torneo.CategoriaLucha;
 import com.tdk.domain.torneo.Cinturon;
+import com.tdk.domain.torneo.Competidor;
 import com.tdk.domain.torneo.Torneo;
 import com.tdk.domain.torneo.competencia.Competencia;
 import com.tdk.domain.torneo.competencia.Llave;
@@ -39,5 +41,9 @@ public interface CompetenciaServiceRemote {
     void finalizarCompentecia(Competencia competencia);
 
     Competencia recuperarCompetencia(Long idCompetencia, boolean completa);
+    
+     public Llave crearLlave(Llave llave, List<Competidor> competidores);
+     
+     public LlaveLucha crearLlaveLucha(Cinturon cinturon, CategoriaLucha categoria, Torneo torneo);
     
 }
