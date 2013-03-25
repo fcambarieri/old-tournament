@@ -1,0 +1,670 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.tdk.client.llaves;
+
+import com.tdk.client.api.ServiceFactory;
+import com.tdk.domain.Institucion;
+import com.tdk.domain.torneo.Categoria;
+import com.tdk.domain.torneo.CategoriaForma;
+import com.tdk.domain.torneo.CategoriaLucha;
+import com.tdk.domain.torneo.Cinturon;
+import com.tdk.domain.torneo.Competidor;
+import com.tdk.domain.torneo.Peso;
+import com.tdk.domain.torneo.Torneo;
+import com.tdk.domain.torneo.TorneoInstitucion;
+import com.tdk.services.CompetenciaServiceRemote;
+import com.tdk.services.TorneoServiceRemote;
+import com.thorplatform.swing.DelegatingComboBoxModel;
+import com.thorplatform.swing.DelegatingTreeTableModel;
+import com.thorplatform.swing.ListProperty;
+import com.thorplatform.swing.MapProperty;
+import com.thorplatform.swing.Property;
+import com.thorplatform.swing.SwingController;
+import com.thorplatform.swing.actions.NotifierSwingActionListener;
+import com.thorplatform.swing.actions.SwingActionListener;
+import java.awt.Color;
+import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import javax.swing.AbstractCellEditor;
+import javax.swing.CellEditor;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.CellEditorListener;
+import javax.swing.table.DefaultTableCellRenderer.UIResource;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeSelectionModel;
+import org.jdesktop.swingx.decorator.AlternateRowHighlighter;
+import org.jdesktop.swingx.decorator.Highlighter;
+import org.jdesktop.swingx.decorator.HighlighterPipeline;
+import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+import org.openide.util.ImageUtilities;
+import org.openide.util.Lookup;
+import org.openide.util.Utilities;
+
+/**
+ *
+ * @author sabon
+ */
+public class TorneoLlavesController extends SwingController {
+
+    private TorneoLlavesForm form = new TorneoLlavesForm();
+    public final Property<Torneo> torneoSelected = new Property<Torneo>("torneoSelected");
+    public final ListProperty<Torneo> torneos = new ListProperty<Torneo>("torneos");
+    public final Property<Cinturon> cinturonSelected = new Property<Cinturon>("cinturonSelected");
+    public final ListProperty<Cinturon> cinturones = new ListProperty<Cinturon>("cinturones");
+    public final Property<CategoriaLucha> categoriaLuchaSelected = new Property<CategoriaLucha>("categoriaLuchaSelected");
+    public final ListProperty<CategoriaLucha> categoriaLuchas = new ListProperty<CategoriaLucha>("categoriaLuchas");
+    public final Property<CategoriaForma> categoriaFormaSelected = new Property<CategoriaForma>("categoriaFormaSelected");
+    public final ListProperty<CategoriaForma> categoriaFormas = new ListProperty<CategoriaForma>("categoriaFormas");
+    //
+    public final MapProperty<TreeItem, TreeItemChildren> categoriasXCompetidores = new MapProperty<TreeItem, TreeItemChildren>("intituciones");
+    private final Property<TreeItem> itemSelected = new Property<TreeItem>("torneoInstitucionSelected");
+    private final Property<TreeItemChildren> competidorSelected = new Property<TreeItemChildren>("competidor");
+    //services
+    private TorneoServiceRemote torneoService;
+    private CompetenciaServiceRemote competenciaService;
+
+    @Override
+    public void initController() {
+        super.initController();
+        configureValidators();
+        configureView();
+        configureBindings();
+        initPresentationModel();
+    }
+
+    private void configureView() {
+        form.cboTorneo.setModel(new DelegatingComboBoxModel<Torneo>(torneos.getList()));
+        form.cboCinturon.setModel(new DelegatingComboBoxModel<Cinturon>(cinturones.getList()));
+        form.cboCategoriaLucha.setModel(new DelegatingComboBoxModel<CategoriaLucha>(categoriaLuchas.getList()));
+        form.cboCategoriaForma.setModel(new DelegatingComboBoxModel<CategoriaForma>(categoriaFormas.getList()));
+
+        ///tree
+
+        //final ImageIcon competidorIcon = new ImageIcon(Utilities.loadImage("com/tdk/client/personas/institucion/alumnos-16x16.png"));
+        //combate-16x16
+        final ImageIcon categoriaLuchaIcon = new ImageIcon(ImageUtilities.loadImage("com/tdk/client/torneos/combate-16x16.png"));
+        final ImageIcon categoriaFormaIcon = new ImageIcon(ImageUtilities.loadImage("com/tdk/client/torneos/formas-16x16.png"));
+        final ImageIcon competidorIcon = new ImageIcon(ImageUtilities.loadImage("com/tdk/client/personas/institucion/alumnos-16x16.png"));
+
+        form.xtbCompetencias.getTreeSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        form.xtbCompetencias.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        HighlighterPipeline ht = new HighlighterPipeline(new Highlighter[]{AlternateRowHighlighter.quickSilver});
+        form.xtbCompetencias.setHighlighters(ht);
+
+        DelegatingTreeTableModel treeModel = new DelegatingTreeTableModel<TorneoInstitucion, Competidor>(){
+
+            @Override
+            public boolean isCellEditable(Object node, int column) {
+                return column == 3;
+            }
+
+            @Override
+            public void setValueAt(Object value, Object node, int column) {
+                //super.setValueAt(value, node, column); //To change body of generated methods, choose Tools | Templates.
+                
+                DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
+                if (treeNode.getUserObject() instanceof TreeItem) {
+                    TreeItem item = (TreeItem) treeNode.getUserObject();
+                    item.setImprimir(Boolean.valueOf(value.toString()));
+
+                }else if (treeNode.getUserObject() instanceof TreeItemChildren) {
+                     TreeItemChildren item = (TreeItemChildren) treeNode.getUserObject();
+                     item.setImprimir(Boolean.valueOf(value.toString()));
+                }
+            }
+            
+            
+        };
+        treeModel.setColumnNames(new String[]{"Categoria", "Cinturon", "Competidores", "Imprimir"});
+        treeModel.setColumnClasses(new Class[]{AbstractTreeTableModel.hierarchicalColumnClass, String.class, String.class, String.class, Integer.class, Boolean.class});
+        treeModel.setCellValueProvider(new DelegatingTreeTableModel.CellValueProvider() {
+            public Object getValueAt(Object node, int column) {
+                Object result = null;
+
+                if (column == 0) {
+                    result = node;
+                } else {
+                    DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
+                    if (treeNode.getUserObject() instanceof TreeItem) {
+                        TreeItem item = (TreeItem) treeNode.getUserObject();
+                        switch (column) {
+                            case 1:
+                                result = item.getCinturon().getDescripcion();
+                                break;
+                            case 2:
+                                result = item.size();
+                                break;
+                            case 3:
+                                result = item.isImprimir();
+                                break;
+                        }
+                    } else if (treeNode.getUserObject() instanceof TreeItemChildren) {
+                        TreeItemChildren item = (TreeItemChildren) treeNode.getUserObject();
+                        switch (column) {
+                            case 2:
+                                result = item.size();
+                                break;
+                            case 3:
+                                result = item.isImprimir();
+                                break;
+                        }
+                    }
+                }
+
+                return result;
+            }
+        });
+
+        form.xtbCompetencias.setTreeCellRenderer(new DefaultTreeCellRenderer() {
+            @Override
+            public java.awt.Component getTreeCellRendererComponent(
+                    javax.swing.JTree tree, Object value, boolean sel,
+                    boolean expanded, boolean leaf, int row,
+                    boolean hasFocus) {
+                super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+                if (value instanceof DefaultMutableTreeNode) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+                    if (node.getUserObject() instanceof TreeItemChildren) {
+                        TreeItemChildren child = (TreeItemChildren) node
+                                .getUserObject();
+                        setText(child.getDisplay());
+                        if (node.isLeaf()) {
+                            setIcon(competidorIcon);
+                        }
+                    }
+                    if (node.getUserObject() instanceof TreeItem) {
+                        TreeItem item = (TreeItem) node
+                                .getUserObject();
+                        setText(item.getCategoria().getDisplay());
+                         setIcon(categoriaFormaIcon);
+                        if (!node.isLeaf()) {
+                            if (item.getCategoria() instanceof CategoriaForma) {
+                                setIcon(categoriaFormaIcon);
+                            } else {
+                                setIcon(categoriaLuchaIcon);
+                            }
+                        }
+                    }
+                }
+                return this;
+            }
+        ;
+        });
+
+        form.xtbCompetencias.setTreeTableModel(treeModel);
+        form.xtbCompetencias.getColumnModel().getColumn(3).setCellRenderer(new BooleanRenderer());
+        form.xtbCompetencias.getColumnModel().getColumn(3).setCellEditor(new BooleanEditor());
+    }
+
+    private void configureBindings() {
+        getSwingBinder().bindComboBoxToObject(form.cboCategoriaLucha, categoriaLuchaSelected, categoriaLuchas);
+        getSwingBinder().bindComboBoxToObject(form.cboCategoriaForma, categoriaFormaSelected, categoriaFormas);
+        getSwingBinder().bindComboBoxToObject(form.cboCinturon, cinturonSelected, cinturones);
+        getSwingBinder().bindComboBoxToObject(form.cboTorneo, torneoSelected, torneos);
+
+
+       getSwingBinder().bindTreeTableMap(form.xtbCompetencias, categoriasXCompetidores, itemSelected, competidorSelected, TreeItem.class, TreeItemChildren.class);
+    }
+
+    private void configureValidators() {
+        getSwingValidator().setJLabel(form.lblMessage);
+//        getSwingValidator().addSwingValidator(new RequiredPropertyValidator(torneoSelected, "Seleccione un torneo"));
+//        getSwingValidator().addSwingValidator(new RequiredPropertyValidator(cinturonSelected, "Seleccione un cinturon"));
+//        getSwingValidator().addSwingValidator(new RequiredPropertyValidator(categoriaSelected, "Seleccione una categoria"));
+    }
+
+    @Override
+    protected JPanel getForm() {
+        return form;
+    }
+
+    @Override
+    protected void onPresentationModelChange(PropertyChangeEvent evt) {
+        if (evt.getSource() == torneoSelected && torneoSelected.get() != null) {
+            fillTreeItem();
+        }
+    }
+
+    private void initPresentationModel() {
+        torneoSelected.set(null);
+        cinturonSelected.set(null);
+        categoriaFormaSelected.set(null);
+        categoriaLuchaSelected.set(null);
+
+
+        NotifierSwingActionListener notifierActionListener = Lookup.getDefault().lookup(NotifierSwingActionListener.class);
+        notifierActionListener.addSwingActionListener(new SwingActionListener() {
+            public void setIsLogin(boolean isLogin) {
+                if (isLogin) {
+                    ServiceFactory sf = Lookup.getDefault().lookup(ServiceFactory.class);
+                    torneoService = sf.getService(TorneoServiceRemote.class);
+                    competenciaService = sf.getService(CompetenciaServiceRemote.class);
+
+                    torneos.assignData(torneoService.listarTorneos("%"));
+                    cinturones.assignData(torneoService.listarCinturones("%"));
+                    categoriaLuchas.assignData(torneoService.listarCategoriasLucha("%"));
+                    categoriaFormas.assignData(torneoService.listarCategoriasForma("%"));
+                }
+            }
+        });
+
+
+    }
+
+    private void fillTreeItem() {
+        if (torneoSelected.get() != null) {
+            Map<TreeItem, List<TreeItemChildren>> competidoreRegistrados = new HashMap<TreeItem, List<TreeItemChildren>>();
+            List<TreeItem> treeItems = new LinkedList<TreeItem>();
+            List<Competidor> competidores = torneoService.listarCompetidoresPorTorneo(torneoSelected.get().getId(), "%");
+            if (competidores != null && !competidores.isEmpty()) {
+                Iterator<Competidor> it = competidores.iterator();
+                while (it.hasNext()) {
+                    Competidor c = it.next();
+                    if (c.getCompetidorCategoriaForma() != null) {
+                        addTreeItem(treeItems, c, c.getCompetidorCategoriaForma().getCategoriaForma(), null);
+                    }
+                    if (c.getCompetidorCategoriaLucha() != null) {
+                        addTreeItem(treeItems, c, c.getCompetidorCategoriaLucha().getPeso().getCategoriaLucha(), c.getCompetidorCategoriaLucha().getPeso());
+                    }
+                }
+            }
+
+            for (TreeItem ti : treeItems) {
+                competidoreRegistrados.put(ti, ti.getChildren());
+            }
+            categoriasXCompetidores.setMap(competidoreRegistrados);
+        }
+
+    }
+
+    private void addTreeItem(List<TreeItem> treeItems, Competidor c, Categoria categoria, Peso peso) {
+        TreeItem item = null;
+        if (peso == null) {
+            item = new FormaTreeItem();
+        } else {
+            item = new LuchaTreeItem();
+        }
+        
+        item.setCinturon(c.getCinturon());
+        item.setTorneo(c.getTorneo());
+        item.setCategoria(categoria);
+        int i = treeItems.indexOf(item);
+
+        if (i >= 0) {
+            treeItems.get(i).add(c);
+        } else {
+            item.add(c);
+            treeItems.add(item);
+        }
+    }
+}
+
+ abstract class TreeItem {
+
+        private Torneo torneo;
+        private Categoria categoria;
+        private Cinturon cinturon;
+        private boolean imprimir = false;
+
+        public TreeItem() {
+        }
+
+        public abstract int size();
+        
+        public abstract void add(Competidor c);
+        
+        public abstract List<TreeItemChildren> getChildren();
+        
+        public Torneo getTorneo() {
+            return torneo;
+        }
+
+        public void setTorneo(Torneo torneo) {
+            this.torneo = torneo;
+        }
+
+        public Categoria getCategoria() {
+            return categoria;
+        }
+
+        public void setCategoria(Categoria categoria) {
+            this.categoria = categoria;
+        }
+
+        public Cinturon getCinturon() {
+            return cinturon;
+        }
+
+        public void setCinturon(Cinturon cinturon) {
+            this.cinturon = cinturon;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof TreeItem)) {
+                return false;
+            }
+            TreeItem other = (TreeItem) obj;
+
+            return torneo.equals(other.getTorneo())
+                    && categoria.equals(other.getCategoria())
+                    && cinturon.equals(other.getCinturon());
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 59 * hash + (this.torneo != null ? this.torneo.hashCode() : 0);
+            hash = 59 * hash + (this.categoria != null ? this.categoria.hashCode() : 0);
+            hash = 59 * hash + (this.cinturon != null ? this.cinturon.hashCode() : 0);
+            return hash;
+        }
+
+        @Override
+        public String toString() {
+            return categoria.getDisplay();
+        }
+
+        public boolean isImprimir() {
+            return imprimir;
+        }
+
+        public void setImprimir(boolean imprimir) {
+            this.imprimir = imprimir;
+        }
+}
+
+class FormaTreeItem extends TreeItem {
+
+    private FormaTreeItemChildren children = new FormaTreeItemChildren();
+    
+    @Override
+    public int size() {
+        return children.size();
+    }
+
+    @Override
+    public void add(Competidor c) {
+       if (children.getCompetidores() == null) {
+           children.setCompetidores(new ArrayList<Competidor>());
+       }
+       children.getCompetidores().add(c);
+    }
+
+    @Override
+    public List<TreeItemChildren> getChildren() {
+        return Collections.emptyList();// children;
+    }
+}
+
+class LuchaTreeItem extends TreeItem {
+
+    private List<LuchaTreeItemChildren> children = new ArrayList<LuchaTreeItemChildren>();
+    
+    @Override
+    public int size() {
+        int i = 0;
+        for(LuchaTreeItemChildren child : children) {
+            i += child.size();
+        }
+        return i;    
+    }
+
+    @Override
+    public void add(Competidor c) {
+           boolean newList = true;
+           for (LuchaTreeItemChildren child :children) {
+               if (child.getPeso().equals(c.getCompetidorCategoriaLucha().getPeso())) {
+                   child.getCompetidores().add(c);
+                   newList = false;
+               }
+           }
+           if (newList) {
+               LuchaTreeItemChildren child = new LuchaTreeItemChildren(c.getCompetidorCategoriaLucha().getPeso(), new ArrayList<Competidor>());
+               child.getCompetidores().add(c);
+               children.add(child);
+           }
+    }
+
+    @Override
+    public List<TreeItemChildren> getChildren() {
+       return new ArrayList<TreeItemChildren>(children);//Collections. children;
+    }
+    
+}
+
+interface TreeItemChildren {
+    
+    String getDisplay();
+    
+    int size(); 
+    
+    boolean isImprimir();
+    
+    void setImprimir(boolean b);
+}
+
+class FormaTreeItemChildren implements TreeItemChildren {
+
+    private CategoriaForma categoria;
+    private List<Competidor> competidores;
+    private boolean imprimir = false;
+
+    public FormaTreeItemChildren() {
+    }
+    
+    public FormaTreeItemChildren(CategoriaForma categoria, List<Competidor> competidores) {
+        this.categoria = categoria;
+        this.competidores = competidores;
+    }
+
+    public List<Competidor> getCompetidores() {
+        return competidores;
+    }
+    
+    public String getDisplay() {
+        return String.format("Forma - ",categoria.getDisplay());
+    }
+
+    public int size() {
+        if (competidores != null) {
+            return competidores.size();
+        } 
+        return 0;
+    }
+
+    public void add(Object o) {
+        competidores.add((Competidor)o);
+    }
+
+    public void setCompetidores(List<Competidor> competidores) {
+        this.competidores = competidores;
+    }
+
+    public boolean isImprimir() {
+        return imprimir;
+    }
+
+    public void setImprimir(boolean imprimir) {
+        this.imprimir = imprimir;
+    }
+    
+}
+
+
+
+
+
+
+
+class LuchaTreeItemChildren implements TreeItemChildren {
+
+    private Peso peso;
+    private List<Competidor> competidores;
+    private boolean imprimir = false;
+
+    public LuchaTreeItemChildren(Peso peso, List<Competidor> competidores) {
+        this.peso = peso;
+        this.competidores = competidores;
+    }
+
+    public LuchaTreeItemChildren() {
+    }
+
+    public void setCompetidores(List<Competidor> competidores) {
+        this.competidores = competidores;
+    }
+
+    public void setPeso(Peso peso) {
+        this.peso = peso;
+    }
+
+    public List<Competidor> getCompetidores() {
+        return competidores;
+    }
+
+    public Peso getPeso() {
+        return peso;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Peso)) {
+            return false;
+        }
+        Peso other = (Peso)obj;
+        return peso.equals(other);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + (this.peso != null ? this.peso.hashCode() : 0);
+        return hash;
+    }
+    
+    
+    
+    public String getDisplay() {
+        return String.format("[%d, %d] Kg",peso.getPesoInferior(), peso.getPesoSuperior());
+    }
+
+    public int size() {
+        if (competidores != null) {
+           return competidores.size();
+        }
+        return 0;
+    }
+
+    public boolean isImprimir() {
+        return imprimir;
+    }
+
+    public void setImprimir(boolean imprimir) {
+        this.imprimir = imprimir;
+    }
+}
+
+class BooleanEditor extends AbstractCellEditor implements TableCellEditor {
+
+    protected JCheckBox checkBox;  
+
+    public BooleanEditor() {
+        checkBox = new JCheckBox();  
+        checkBox.setHorizontalAlignment(SwingConstants.CENTER);  
+        checkBox.setBackground( Color.white);  
+    }
+
+    @Override
+    public boolean isCellEditable(EventObject e) {
+        return true;
+    }
+     
+    public Object getCellEditorValue() {
+         return Boolean.valueOf(checkBox.isSelected());  
+    }
+
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        if (value instanceof Boolean) {
+            checkBox.setSelected(((Boolean) value).booleanValue());  
+        }
+        return checkBox;
+    }
+    
+}
+
+class BooleanRenderer extends JCheckBox implements TreeCellRenderer, TableCellRenderer {
+
+    private static final Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+
+    public BooleanRenderer() {
+        super();
+        setHorizontalAlignment(JLabel.CENTER);
+        setBorderPainted(true);
+    }
+
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        setForeground(tree.getForeground());
+        setBackground(tree.getBackground());
+        setSelected((value != null && ((Boolean) value).booleanValue())); // <--- does not support strings
+        if (hasFocus) {
+            setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+        } else {
+            setBorder(noFocusBorder);
+        }
+        return this;
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        if (isSelected) {
+            setForeground(table.getSelectionForeground());
+            super.setBackground(table.getSelectionBackground());
+        } else {
+            setForeground(table.getForeground());
+            setBackground(table.getBackground());
+        }
+
+        setForeground(table.getForeground());
+        setBackground(table.getBackground());
+        setSelected((value != null && ((Boolean) value).booleanValue())); // <--- does not support strings
+
+        if (hasFocus) {
+            setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+        } else {
+            setBorder(noFocusBorder);
+        }
+
+        return this;
+    }
+
+}

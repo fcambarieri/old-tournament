@@ -29,15 +29,18 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
         pnlFiltros = new javax.swing.JPanel();
         lblTorneo = new javax.swing.JLabel();
         cboTorneo = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
-        cboCategoria = new javax.swing.JComboBox();
-        jLabel3 = new javax.swing.JLabel();
+        cboCategoriaLucha = new javax.swing.JComboBox();
         cboCinturon = new javax.swing.JComboBox();
+        cboCategoriaForma = new javax.swing.JComboBox();
+        chkCategoriaLucha = new javax.swing.JCheckBox();
+        chkCinturon = new javax.swing.JCheckBox();
+        chkCategoriaForma = new javax.swing.JCheckBox();
         pnlResultados = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jXTable1 = new org.jdesktop.swingx.JXTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        xtbCompetencias = new org.jdesktop.swingx.JXTreeTable();
         btnCrearLlaves = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
+        lblMessage = new javax.swing.JLabel();
 
         pnlFiltros.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.pnlFiltros.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), java.awt.SystemColor.activeCaption)); // NOI18N
 
@@ -45,13 +48,17 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
 
         cboTorneo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.jLabel2.text")); // NOI18N
-
-        cboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.jLabel3.text")); // NOI18N
+        cboCategoriaLucha.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cboCinturon.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cboCategoriaForma.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        org.openide.awt.Mnemonics.setLocalizedText(chkCategoriaLucha, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.chkCategoriaLucha.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(chkCinturon, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.chkCinturon.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(chkCategoriaForma, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.chkCategoriaForma.text")); // NOI18N
 
         javax.swing.GroupLayout pnlFiltrosLayout = new javax.swing.GroupLayout(pnlFiltros);
         pnlFiltros.setLayout(pnlFiltrosLayout);
@@ -59,20 +66,22 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
             pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFiltrosLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTorneo)
+                    .addComponent(chkCategoriaLucha))
+                .addGap(5, 5, 5)
                 .addGroup(pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(pnlFiltrosLayout.createSequentialGroup()
-                        .addComponent(lblTorneo)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboTorneo, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFiltrosLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(10, 10, 10)
-                        .addComponent(cboCinturon, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cboTorneo, 0, 149, Short.MAX_VALUE)
+                    .addComponent(cboCategoriaLucha, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkCinturon)
+                    .addComponent(chkCategoriaForma))
+                .addGap(3, 3, 3)
+                .addGroup(pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cboCategoriaForma, 0, 175, Short.MAX_VALUE)
+                    .addComponent(cboCinturon, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         pnlFiltrosLayout.setVerticalGroup(
             pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,29 +90,20 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
                 .addGroup(pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTorneo)
                     .addComponent(cboTorneo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cboCinturon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkCinturon))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(pnlFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(cboCinturon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cboCategoriaLucha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboCategoriaForma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkCategoriaLucha)
+                    .addComponent(chkCategoriaForma))
+                .addContainerGap())
         );
 
         pnlResultados.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.pnlResultados.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), java.awt.SystemColor.activeCaption)); // NOI18N
 
-        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jXTable1);
+        jScrollPane2.setViewportView(xtbCompetencias);
 
         javax.swing.GroupLayout pnlResultadosLayout = new javax.swing.GroupLayout(pnlResultados);
         pnlResultados.setLayout(pnlResultadosLayout);
@@ -111,13 +111,13 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
             pnlResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlResultadosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane2)
                 .addContainerGap())
         );
         pnlResultadosLayout.setVerticalGroup(
             pnlResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlResultadosLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -130,6 +130,8 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(lblMessage, org.openide.util.NbBundle.getMessage(TorneoLlavesForm.class, "TorneoLlavesForm.lblMessage.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,23 +142,29 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
                     .addComponent(pnlResultados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlFiltros, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 466, Short.MAX_VALUE)
+                        .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnCrearLlaves)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBorrar)))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnBorrar, btnCrearLlaves});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlResultados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCrearLlaves)
-                    .addComponent(btnBorrar))
+                .addComponent(pnlResultados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnCrearLlaves)
+                        .addComponent(btnBorrar)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -168,15 +176,18 @@ public class TorneoLlavesForm extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnBorrar;
     public javax.swing.JButton btnCrearLlaves;
-    public javax.swing.JComboBox cboCategoria;
+    public javax.swing.JComboBox cboCategoriaForma;
+    public javax.swing.JComboBox cboCategoriaLucha;
     public javax.swing.JComboBox cboCinturon;
     public javax.swing.JComboBox cboTorneo;
-    public javax.swing.JLabel jLabel2;
-    public javax.swing.JLabel jLabel3;
-    public javax.swing.JScrollPane jScrollPane1;
-    public org.jdesktop.swingx.JXTable jXTable1;
+    public javax.swing.JCheckBox chkCategoriaForma;
+    public javax.swing.JCheckBox chkCategoriaLucha;
+    public javax.swing.JCheckBox chkCinturon;
+    public javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JLabel lblMessage;
     public javax.swing.JLabel lblTorneo;
     public javax.swing.JPanel pnlFiltros;
     public javax.swing.JPanel pnlResultados;
+    public org.jdesktop.swingx.JXTreeTable xtbCompetencias;
     // End of variables declaration//GEN-END:variables
 }

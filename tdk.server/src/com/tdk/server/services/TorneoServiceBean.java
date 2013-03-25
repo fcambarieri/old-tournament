@@ -632,7 +632,5 @@ public class TorneoServiceBean extends JPAService implements TorneoServiceRemote
         return query.getResultList();
     }
     
-     public List<Competidor> listarCompetidoresPorCategoria () {
-         return null;
-     }
+    
 }
