@@ -27,7 +27,8 @@ public class CompetidorBNode extends BinaryNode<Competidor> {
         if (getUserObject() != null) {
             return getUserObject().getDisplayCompetidor();
         } else {
-            return "Sin competidor";
+            //return "Sin competidor";
+            return "";
         }
     }
 

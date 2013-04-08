@@ -160,4 +160,12 @@ public class LlaveController<T extends Categoria> extends SwingModalController {
         }
     }
     
+    public void enableFilters() {
+        form.pnlFilters.setVisible(false);
+    }
+    
+    public void initController(List<Competidor> list, String title) {
+        competidores.convertListToBinaryTree(list);
+        treePanel.setTitle(title);
+    }
 }

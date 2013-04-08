@@ -22,10 +22,13 @@ import com.thorplatform.swing.ListProperty;
 import com.thorplatform.swing.MapProperty;
 import com.thorplatform.swing.Property;
 import com.thorplatform.swing.SwingController;
+import com.thorplatform.swing.SwingControllerFactory;
 import com.thorplatform.swing.actions.NotifierSwingActionListener;
 import com.thorplatform.swing.actions.SwingActionListener;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,6 +107,11 @@ public class TorneoLlavesController extends SwingController {
         form.cboCategoriaLucha.setModel(new DelegatingComboBoxModel<CategoriaLucha>(categoriaLuchas.getList()));
         form.cboCategoriaForma.setModel(new DelegatingComboBoxModel<CategoriaForma>(categoriaFormas.getList()));
 
+        form.btnPreVisualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                bracketPreview();
+            }
+        });
         ///tree
 
         //final ImageIcon competidorIcon = new ImageIcon(Utilities.loadImage("com/tdk/client/personas/institucion/alumnos-16x16.png"));
@@ -117,8 +125,7 @@ public class TorneoLlavesController extends SwingController {
         HighlighterPipeline ht = new HighlighterPipeline(new Highlighter[]{AlternateRowHighlighter.quickSilver});
         form.xtbCompetencias.setHighlighters(ht);
 
-        DelegatingTreeTableModel treeModel = new DelegatingTreeTableModel<TorneoInstitucion, Competidor>(){
-
+        DelegatingTreeTableModel treeModel = new DelegatingTreeTableModel<TorneoInstitucion, Competidor>() {
             @Override
             public boolean isCellEditable(Object node, int column) {
                 return column == 3;
@@ -127,19 +134,22 @@ public class TorneoLlavesController extends SwingController {
             @Override
             public void setValueAt(Object value, Object node, int column) {
                 //super.setValueAt(value, node, column); //To change body of generated methods, choose Tools | Templates.
-                
+
                 DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
                 if (treeNode.getUserObject() instanceof TreeItem) {
                     TreeItem item = (TreeItem) treeNode.getUserObject();
                     item.setImprimir(Boolean.valueOf(value.toString()));
-
-                }else if (treeNode.getUserObject() instanceof TreeItemChildren) {
-                     TreeItemChildren item = (TreeItemChildren) treeNode.getUserObject();
-                     item.setImprimir(Boolean.valueOf(value.toString()));
+                    if (item.isImprimir()) {
+                        for (TreeItemChildren child : item.getChildren()) {
+                            child.setImprimir(true);
+                        }
+                        this.nodeStructureChanged(treeNode);
+                    }
+                } else if (treeNode.getUserObject() instanceof TreeItemChildren) {
+                    TreeItemChildren item = (TreeItemChildren) treeNode.getUserObject();
+                    item.setImprimir(Boolean.valueOf(value.toString()));
                 }
             }
-            
-            
         };
         treeModel.setColumnNames(new String[]{"Categoria", "Cinturon", "Competidores", "Imprimir"});
         treeModel.setColumnClasses(new Class[]{AbstractTreeTableModel.hierarchicalColumnClass, String.class, String.class, String.class, Integer.class, Boolean.class});
@@ -203,7 +213,7 @@ public class TorneoLlavesController extends SwingController {
                         TreeItem item = (TreeItem) node
                                 .getUserObject();
                         setText(item.getCategoria().getDisplay());
-                         setIcon(categoriaFormaIcon);
+                        setIcon(categoriaFormaIcon);
                         if (!node.isLeaf()) {
                             if (item.getCategoria() instanceof CategoriaForma) {
                                 setIcon(categoriaFormaIcon);
@@ -230,7 +240,7 @@ public class TorneoLlavesController extends SwingController {
         getSwingBinder().bindComboBoxToObject(form.cboTorneo, torneoSelected, torneos);
 
 
-       getSwingBinder().bindTreeTableMap(form.xtbCompetencias, categoriasXCompetidores, itemSelected, competidorSelected, TreeItem.class, TreeItemChildren.class);
+        getSwingBinder().bindTreeTableMap(form.xtbCompetencias, categoriasXCompetidores, itemSelected, competidorSelected, TreeItem.class, TreeItemChildren.class);
     }
 
     private void configureValidators() {
@@ -304,6 +314,22 @@ public class TorneoLlavesController extends SwingController {
 
     }
 
+    private void bracketPreview() {
+        if (competidorSelected.get() != null) {
+            TreeItemChildren child = competidorSelected.get();
+            if (child.getCompetidores().size() > 1) {
+                SwingControllerFactory scf = Lookup.getDefault().lookup(SwingControllerFactory.class);
+                LlavePreviewController controller = scf.createController(LlavePreviewController.class);
+                controller.setCompetidores(child.getCompetidores());
+                controller.showOnTopComponent(String.format("%s %s - %s", child.getRoot().toString(), child.getDisplay(), child.getRoot().getCinturon().getDescripcion()));
+//                LlaveController controller = scf.createController(LlaveController.class);
+//                controller.enableFilters();
+//                controller.initController(child.getCompetidores(), child.getDisplay());
+//                controller.showModal();
+            }
+        }
+    }
+
     private void addTreeItem(List<TreeItem> treeItems, Competidor c, Categoria categoria, Peso peso) {
         TreeItem item = null;
         if (peso == null) {
@@ -311,7 +337,7 @@ public class TorneoLlavesController extends SwingController {
         } else {
             item = new LuchaTreeItem();
         }
-        
+
         item.setCinturon(c.getCinturon());
         item.setTorneo(c.getTorneo());
         item.setCategoria(categoria);
@@ -326,88 +352,88 @@ public class TorneoLlavesController extends SwingController {
     }
 }
 
- abstract class TreeItem {
+abstract class TreeItem {
 
-        private Torneo torneo;
-        private Categoria categoria;
-        private Cinturon cinturon;
-        private boolean imprimir = false;
+    private Torneo torneo;
+    private Categoria categoria;
+    private Cinturon cinturon;
+    private boolean imprimir = false;
 
-        public TreeItem() {
+    public TreeItem() {
+    }
+
+    public abstract int size();
+
+    public abstract void add(Competidor c);
+
+    public abstract List<TreeItemChildren> getChildren();
+
+    public Torneo getTorneo() {
+        return torneo;
+    }
+
+    public void setTorneo(Torneo torneo) {
+        this.torneo = torneo;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Cinturon getCinturon() {
+        return cinturon;
+    }
+
+    public void setCinturon(Cinturon cinturon) {
+        this.cinturon = cinturon;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
         }
-
-        public abstract int size();
-        
-        public abstract void add(Competidor c);
-        
-        public abstract List<TreeItemChildren> getChildren();
-        
-        public Torneo getTorneo() {
-            return torneo;
+        if (!(obj instanceof TreeItem)) {
+            return false;
         }
+        TreeItem other = (TreeItem) obj;
 
-        public void setTorneo(Torneo torneo) {
-            this.torneo = torneo;
-        }
+        return torneo.equals(other.getTorneo())
+                && categoria.equals(other.getCategoria())
+                && cinturon.equals(other.getCinturon());
+    }
 
-        public Categoria getCategoria() {
-            return categoria;
-        }
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + (this.torneo != null ? this.torneo.hashCode() : 0);
+        hash = 59 * hash + (this.categoria != null ? this.categoria.hashCode() : 0);
+        hash = 59 * hash + (this.cinturon != null ? this.cinturon.hashCode() : 0);
+        return hash;
+    }
 
-        public void setCategoria(Categoria categoria) {
-            this.categoria = categoria;
-        }
+    @Override
+    public String toString() {
+        return categoria.getDisplay();
+    }
 
-        public Cinturon getCinturon() {
-            return cinturon;
-        }
+    public boolean isImprimir() {
+        return imprimir;
+    }
 
-        public void setCinturon(Cinturon cinturon) {
-            this.cinturon = cinturon;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof TreeItem)) {
-                return false;
-            }
-            TreeItem other = (TreeItem) obj;
-
-            return torneo.equals(other.getTorneo())
-                    && categoria.equals(other.getCategoria())
-                    && cinturon.equals(other.getCinturon());
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 59 * hash + (this.torneo != null ? this.torneo.hashCode() : 0);
-            hash = 59 * hash + (this.categoria != null ? this.categoria.hashCode() : 0);
-            hash = 59 * hash + (this.cinturon != null ? this.cinturon.hashCode() : 0);
-            return hash;
-        }
-
-        @Override
-        public String toString() {
-            return categoria.getDisplay();
-        }
-
-        public boolean isImprimir() {
-            return imprimir;
-        }
-
-        public void setImprimir(boolean imprimir) {
-            this.imprimir = imprimir;
-        }
+    public void setImprimir(boolean imprimir) {
+        this.imprimir = imprimir;
+    }
 }
 
 class FormaTreeItem extends TreeItem {
 
-    private FormaTreeItemChildren children = new FormaTreeItemChildren();
-    
+    private FormaTreeItemChildren children = new FormaTreeItemChildren(this);
+
     @Override
     public int size() {
         return children.size();
@@ -415,10 +441,10 @@ class FormaTreeItem extends TreeItem {
 
     @Override
     public void add(Competidor c) {
-       if (children.getCompetidores() == null) {
-           children.setCompetidores(new ArrayList<Competidor>());
-       }
-       children.getCompetidores().add(c);
+        if (children.getCompetidores() == null) {
+            children.setCompetidores(new ArrayList<Competidor>());
+        }
+        children.getCompetidores().add(c);
     }
 
     @Override
@@ -430,59 +456,65 @@ class FormaTreeItem extends TreeItem {
 class LuchaTreeItem extends TreeItem {
 
     private List<LuchaTreeItemChildren> children = new ArrayList<LuchaTreeItemChildren>();
-    
+
     @Override
     public int size() {
         int i = 0;
-        for(LuchaTreeItemChildren child : children) {
+        for (LuchaTreeItemChildren child : children) {
             i += child.size();
         }
-        return i;    
+        return i;
     }
 
     @Override
     public void add(Competidor c) {
-           boolean newList = true;
-           for (LuchaTreeItemChildren child :children) {
-               if (child.getPeso().equals(c.getCompetidorCategoriaLucha().getPeso())) {
-                   child.getCompetidores().add(c);
-                   newList = false;
-               }
-           }
-           if (newList) {
-               LuchaTreeItemChildren child = new LuchaTreeItemChildren(c.getCompetidorCategoriaLucha().getPeso(), new ArrayList<Competidor>());
-               child.getCompetidores().add(c);
-               children.add(child);
-           }
+        boolean newList = true;
+        for (LuchaTreeItemChildren child : children) {
+            if (child.getPeso().equals(c.getCompetidorCategoriaLucha().getPeso())) {
+                child.getCompetidores().add(c);
+                newList = false;
+            }
+        }
+        if (newList) {
+            LuchaTreeItemChildren child = new LuchaTreeItemChildren(this,c.getCompetidorCategoriaLucha().getPeso(), new ArrayList<Competidor>());
+            child.getCompetidores().add(c);
+            children.add(child);
+        }
     }
 
     @Override
     public List<TreeItemChildren> getChildren() {
-       return new ArrayList<TreeItemChildren>(children);//Collections. children;
+        return new ArrayList<TreeItemChildren>(children);//Collections. children;
     }
-    
 }
 
 interface TreeItemChildren {
-    
+
     String getDisplay();
-    
-    int size(); 
-    
+
+    int size();
+
     boolean isImprimir();
-    
+
     void setImprimir(boolean b);
+    
+    List<Competidor> getCompetidores();
+    
+    TreeItem getRoot();
 }
+
 
 class FormaTreeItemChildren implements TreeItemChildren {
 
     private CategoriaForma categoria;
     private List<Competidor> competidores;
     private boolean imprimir = false;
+    private TreeItem root;
 
-    public FormaTreeItemChildren() {
+    public FormaTreeItemChildren(TreeItem root) {
+        this.root = root;
     }
-    
+
     public FormaTreeItemChildren(CategoriaForma categoria, List<Competidor> competidores) {
         this.categoria = categoria;
         this.competidores = competidores;
@@ -491,20 +523,20 @@ class FormaTreeItemChildren implements TreeItemChildren {
     public List<Competidor> getCompetidores() {
         return competidores;
     }
-    
+
     public String getDisplay() {
-        return String.format("Forma - ",categoria.getDisplay());
+        return String.format("Forma - ", categoria.getDisplay());
     }
 
     public int size() {
         if (competidores != null) {
             return competidores.size();
-        } 
+        }
         return 0;
     }
 
     public void add(Object o) {
-        competidores.add((Competidor)o);
+        competidores.add((Competidor) o);
     }
 
     public void setCompetidores(List<Competidor> competidores) {
@@ -518,13 +550,11 @@ class FormaTreeItemChildren implements TreeItemChildren {
     public void setImprimir(boolean imprimir) {
         this.imprimir = imprimir;
     }
-    
+
+    public TreeItem getRoot() {
+        return root;
+    }
 }
-
-
-
-
-
 
 
 class LuchaTreeItemChildren implements TreeItemChildren {
@@ -532,13 +562,16 @@ class LuchaTreeItemChildren implements TreeItemChildren {
     private Peso peso;
     private List<Competidor> competidores;
     private boolean imprimir = false;
+    private TreeItem root;
 
-    public LuchaTreeItemChildren(Peso peso, List<Competidor> competidores) {
+    public LuchaTreeItemChildren(TreeItem root, Peso peso, List<Competidor> competidores) {
+        this.root = root;
         this.peso = peso;
         this.competidores = competidores;
     }
 
-    public LuchaTreeItemChildren() {
+    public LuchaTreeItemChildren(TreeItem root) {
+        this.root = root;
     }
 
     public void setCompetidores(List<Competidor> competidores) {
@@ -562,7 +595,7 @@ class LuchaTreeItemChildren implements TreeItemChildren {
         if (!(obj instanceof Peso)) {
             return false;
         }
-        Peso other = (Peso)obj;
+        Peso other = (Peso) obj;
         return peso.equals(other);
     }
 
@@ -572,16 +605,14 @@ class LuchaTreeItemChildren implements TreeItemChildren {
         hash = 59 * hash + (this.peso != null ? this.peso.hashCode() : 0);
         return hash;
     }
-    
-    
-    
+
     public String getDisplay() {
-        return String.format("[%d, %d] Kg",peso.getPesoInferior(), peso.getPesoSuperior());
+        return String.format("[%d, %d] Kg", peso.getPesoInferior(), peso.getPesoSuperior());
     }
 
     public int size() {
         if (competidores != null) {
-           return competidores.size();
+            return competidores.size();
         }
         return 0;
     }
@@ -593,34 +624,37 @@ class LuchaTreeItemChildren implements TreeItemChildren {
     public void setImprimir(boolean imprimir) {
         this.imprimir = imprimir;
     }
+
+    public TreeItem getRoot() {
+        return root;
+    }
 }
 
 class BooleanEditor extends AbstractCellEditor implements TableCellEditor {
 
-    protected JCheckBox checkBox;  
+    protected JCheckBox checkBox;
 
     public BooleanEditor() {
-        checkBox = new JCheckBox();  
-        checkBox.setHorizontalAlignment(SwingConstants.CENTER);  
-        checkBox.setBackground( Color.white);  
+        checkBox = new JCheckBox();
+        checkBox.setHorizontalAlignment(SwingConstants.CENTER);
+        checkBox.setBackground(Color.white);
     }
 
     @Override
     public boolean isCellEditable(EventObject e) {
         return true;
     }
-     
+
     public Object getCellEditorValue() {
-         return Boolean.valueOf(checkBox.isSelected());  
+        return Boolean.valueOf(checkBox.isSelected());
     }
 
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         if (value instanceof Boolean) {
-            checkBox.setSelected(((Boolean) value).booleanValue());  
+            checkBox.setSelected(((Boolean) value).booleanValue());
         }
         return checkBox;
     }
-    
 }
 
 class BooleanRenderer extends JCheckBox implements TreeCellRenderer, TableCellRenderer {
@@ -666,5 +700,4 @@ class BooleanRenderer extends JCheckBox implements TreeCellRenderer, TableCellRe
 
         return this;
     }
-
 }

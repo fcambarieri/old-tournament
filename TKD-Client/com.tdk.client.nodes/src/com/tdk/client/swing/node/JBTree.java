@@ -9,26 +9,21 @@ import com.tdk.client.nodes.BinaryTreeModel;
 import com.tdk.client.nodes.BinaryTreeModelListener;
 import com.tdk.client.swing.node.actions.PositionAction;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
 import org.jdesktop.swingx.JXStatusBar;
 import org.netbeans.api.visual.action.ActionFactory;
-import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.print.ScenePrinter;
 import org.netbeans.api.visual.widget.ConnectionWidget;
+import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
@@ -64,6 +59,7 @@ public class JBTree extends JPanel {
     private org.jdesktop.swingx.JXStatusBar jxStatusBar;
     private JLabel position;
     private JLabel nodePosition;
+    private LabelWidget title;
 
     public JBTree() {
         this(new Scene());
@@ -206,17 +202,13 @@ public class JBTree extends JPanel {
     }
 
     private void calcLocation(BNode node, int xp, int yp, int top, int level) {
-        /*if (node != null) {
-            /*Widget jn = nodeMapping.get(node);
-            jn.setPreferredLocation(new Point(xp, yp));
-            Rectangle bounds = jn.getBounds();
-            xp = xp - getParent2child() - (bounds != null ? bounds.width : 0);
-            top = top / 2;
-
-            calcLocation(node.getLeftNode(), xp, yp + top, top);
-            calcLocation(node.getRightNode(), xp, yp - top, top);
-        }*/
         getJBNodeLocationFactory().createJBNodeLocation(node, nodeMapping, xp, yp, top, level);
+        if (title != null) {
+            title.setPreferredLocation(new Point(xp, yp - 100));
+            if (!backgroundLayer.getChildren().contains(title)) {
+                backgroundLayer.addChild(title);
+            }
+        }
     }
 
     private void createConnections(BNode bnode) {
@@ -362,6 +354,10 @@ public class JBTree extends JPanel {
             }
         });
         jxStatusBar.add(button);
+        
+        title = new LabelWidget(scene, "");
+//        title.setPreferredLocation(new Point(screenSize.width / 2, 0));
+//        backgroundLayer.addChild(title);
     }
 
     /**
@@ -387,6 +383,10 @@ public class JBTree extends JPanel {
             setInitialY((int) (getHeight() / 2));
         }
     }
+
+   public void setTitle(String title) {
+       this.title.setLabel(title);
+   }
 }
 
 

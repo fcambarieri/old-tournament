@@ -852,13 +852,20 @@ public class DefaultSwingBinder implements SwingBinder {
                     V child = childProperty.get();
 
                     if (userObject != null) {
-                        if (userObject.getClass().isAssignableFrom(keyClass) && !userObject.equals(key)) {
+                        if (keyClass.isAssignableFrom(userObject.getClass()) && !userObject.equals(key)) {
                             keyProperty.set((K) userObject);
                             childProperty.set(null);
-                        } else if (userObject.getClass().isAssignableFrom(childClass) && !userObject.equals(child)) {
+                        } else if (childClass.isAssignableFrom(userObject.getClass()) && !userObject.equals(child)) {
                             childProperty.set((V) userObject);
                             keyProperty.set(null);
                         }
+//                        if (userObject.getClass().isAssignableFrom(keyClass) && !userObject.equals(key)) {
+//                            keyProperty.set((K) userObject);
+//                            childProperty.set(null);
+//                        } else if (userObject.getClass().isAssignableFrom(childClass) && !userObject.equals(child)) {
+//                            childProperty.set((V) userObject);
+//                            keyProperty.set(null);
+//                        }
                     }
                 }
             }
