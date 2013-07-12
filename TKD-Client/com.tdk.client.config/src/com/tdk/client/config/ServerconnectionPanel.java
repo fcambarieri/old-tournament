@@ -4,16 +4,64 @@
  */
 package com.tdk.client.config;
 
+import com.thorplatform.swing.Property;
+import com.thorplatform.swing.SwingBinder;
+import com.thorplatform.swing.SwingBinderFactory;
+import com.thorplatform.utils.ServerConnectionProperties;
+import com.thorplatform.utils.ServerConnectionProperties.Key;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import org.openide.util.Lookup;
+
 final class ServerconnectionPanel extends javax.swing.JPanel {
 
     private final ServerconnectionOptionsPanelController controller;
+    private SwingBinder binder;
+    private final Property<String> host = new Property<String>("host");
+    private final Property<String> port = new Property<String>("port");
+    private final Property<String> serviceName = new Property<String>("serviceName");
+    private final Property<String> connection = new Property<String>("connection");
+    
+    private final Property<Boolean> rbPropConnection = new Property<Boolean>("rbConnection");
+    private final Property<Boolean> rbPropStringConnection = new Property<Boolean>("rbStringConnection");
+    
 
     ServerconnectionPanel(ServerconnectionOptionsPanelController controller) {
         this.controller = controller;
         initComponents();
-        // TODO listen to changes in form fields and call controller.changed()
+        initBinding();
     }
 
+    private void initBinding() {
+        SwingBinderFactory sbf = Lookup.getDefault().lookup(SwingBinderFactory.class);
+        binder = sbf.createBinder();
+        
+        binder.bindTextComponentToString(txHost, host);
+        binder.bindTextComponentToString(txtPort, port);
+        binder.bindTextComponentToString(txtServiceName, serviceName);
+        binder.bindTextComponentToString(txtStringConnection, connection);
+        
+        binder.bindRadioButtonToBoolean(rbConnection, rbPropConnection);
+        binder.bindRadioButtonToBoolean(rbStringConnection, rbPropStringConnection);
+        
+        binder.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getSource().equals(rbPropConnection)) {
+                    setEnabledTxt(true);
+                } else if (evt.getSource().equals(rbPropStringConnection)) {
+                    setEnabledTxt(false);
+                }
+            }
+        });
+    }
+
+    public void setEnabledTxt(boolean value) {
+        txtPort.setEnabled(value);
+        txtServiceName.setEnabled(value);
+        txHost.setEnabled(value);
+        txtStringConnection.setEnabled(!value);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -22,37 +70,126 @@ final class ServerconnectionPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        rbConnectionGrup = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pnlIP = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtIP = new javax.swing.JFormattedTextField();
+        txHost = new javax.swing.JFormattedTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtPort = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtServiceName = new javax.swing.JTextField();
+        rbConnection = new javax.swing.JRadioButton();
+        rbStringConnection = new javax.swing.JRadioButton();
+        txtStringConnection = new javax.swing.JTextField();
         pnlBackup = new javax.swing.JPanel();
 
         pnlIP.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.pnlIP.border.title"))); // NOI18N
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.jLabel1.text")); // NOI18N
 
-        txtIP.setText(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.txtIP.text")); // NOI18N
+        txHost.setText(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.txHost.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.jLabel2.text")); // NOI18N
+
+        txtPort.setText(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.txtPort.text")); // NOI18N
+        txtPort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPortActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.jLabel3.text")); // NOI18N
+
+        txtServiceName.setText(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.txtServiceName.text")); // NOI18N
+        txtServiceName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtServiceNameActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txHost, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtServiceName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(214, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtServiceName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        rbConnectionGrup.add(rbConnection);
+        org.openide.awt.Mnemonics.setLocalizedText(rbConnection, org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.rbConnection.text")); // NOI18N
+
+        rbConnectionGrup.add(rbStringConnection);
+        org.openide.awt.Mnemonics.setLocalizedText(rbStringConnection, org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.rbStringConnection.text")); // NOI18N
+
+        txtStringConnection.setText(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.txtStringConnection.text")); // NOI18N
 
         javax.swing.GroupLayout pnlIPLayout = new javax.swing.GroupLayout(pnlIP);
         pnlIP.setLayout(pnlIPLayout);
         pnlIPLayout.setHorizontalGroup(
             pnlIPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlIPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtIP, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(309, Short.MAX_VALUE))
+                .addGroup(pnlIPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlIPLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlIPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(pnlIPLayout.createSequentialGroup()
+                                .addGroup(pnlIPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rbConnection)
+                                    .addComponent(rbStringConnection))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(pnlIPLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(txtStringConnection)))
+                .addContainerGap())
         );
         pnlIPLayout.setVerticalGroup(
             pnlIPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlIPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlIPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(221, Short.MAX_VALUE))
+                .addGap(8, 8, 8)
+                .addComponent(rbConnection)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbStringConnection)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtStringConnection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(ServerconnectionPanel.class, "ServerconnectionPanel.pnlIP.TabConstraints.tabTitle"), pnlIP); // NOI18N
@@ -88,6 +225,14 @@ final class ServerconnectionPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPortActionPerformed
+
+    private void txtServiceNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtServiceNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtServiceNameActionPerformed
+
     void load() {
         // TODO read settings and initialize GUI
         // Example:        
@@ -96,6 +241,16 @@ final class ServerconnectionPanel extends javax.swing.JPanel {
         // someCheckBox.setSelected(NbPreferences.forModule(ServerconnectionPanel.class).getBoolean("someFlag", false));
         // or:
         // someTextField.setText(SomeSystemOption.getDefault().getSomeStringProperty());
+        ServerConnectionProperties config = Lookup.getDefault().lookup(ServerConnectionProperties.class);
+        host.set(config.get(Key.HOST));
+        port.set(config.get(Key.PORT));
+        serviceName.set(config.get(Key.SERVICE_NAME));
+        connection.set(config.get(Key.CONNECTION));
+        
+        if (connection.get() == null || "".equals(connection.get())) {
+            rbPropConnection.set(Boolean.TRUE);
+        }
+        
     }
 
     void store() {
@@ -106,6 +261,12 @@ final class ServerconnectionPanel extends javax.swing.JPanel {
         // NbPreferences.forModule(ServerconnectionPanel.class).putBoolean("someFlag", someCheckBox.isSelected());
         // or:
         // SomeSystemOption.getDefault().setSomeStringProperty(someTextField.getText());
+        ServerConnectionProperties config = Lookup.getDefault().lookup(ServerConnectionProperties.class);
+        config.set(Key.HOST, host.get());
+        config.set(Key.PORT, port.get());
+        config.set(Key.SERVICE_NAME, serviceName.get());
+        config.set(Key.CONNECTION, connection.get());
+        config.save();
     }
 
     boolean valid() {
@@ -114,9 +275,18 @@ final class ServerconnectionPanel extends javax.swing.JPanel {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JLabel jLabel1;
+    public javax.swing.JLabel jLabel2;
+    public javax.swing.JLabel jLabel3;
+    public javax.swing.JPanel jPanel1;
     public javax.swing.JTabbedPane jTabbedPane1;
     public javax.swing.JPanel pnlBackup;
     public javax.swing.JPanel pnlIP;
-    public javax.swing.JFormattedTextField txtIP;
+    public javax.swing.JRadioButton rbConnection;
+    public javax.swing.ButtonGroup rbConnectionGrup;
+    public javax.swing.JRadioButton rbStringConnection;
+    public javax.swing.JFormattedTextField txHost;
+    public javax.swing.JTextField txtPort;
+    public javax.swing.JTextField txtServiceName;
+    public javax.swing.JTextField txtStringConnection;
     // End of variables declaration//GEN-END:variables
 }

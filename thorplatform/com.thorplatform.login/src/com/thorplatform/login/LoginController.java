@@ -4,6 +4,7 @@ import com.thorplatform.swing.LoginGlassPane;
 import com.thorplatform.swing.Property;
 import com.thorplatform.swing.SwingModalController;
 import com.thorplatform.swing.validator.StringPropertyValidator;
+import com.thorplatform.utils.ServerConnectionProperties;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -175,13 +176,18 @@ public class LoginController extends SwingModalController {
     }
 
     public String getServerHost() {
-        String server = "//localhost:1198/loginServer";
-        String propr = System.getProperty("serverHost");
-        if (propr != null) {
-            server = propr + "/loginServer";
-        }
-        return server;
+//        String server = "//localhost:1198/loginServer";
+//        String propr = System.getProperty("serverHost");
+//        if (propr != null) {
+//            server = propr + "/loginServer";
+//        }
+//        return server;
+       ServerConnectionProperties prop = Lookup.getDefault().lookup(ServerConnectionProperties.class);
+       
+       return prop.getServerConnection();
     }
+    
+    
     
     public static interface Listener {
 
