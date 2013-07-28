@@ -111,7 +111,14 @@ public class Competidor implements Serializable {
     
     @Transient
     public String getDisplayCompetidor() {
-        return alumno.getPersonaFisica().getApellido() + " ("+alumno.getInstitucion().getDisplayName() + ")";
+        StringBuilder sb = new StringBuilder();
+        sb.append(alumno.getPersonaFisica().getNombre().substring(0, 1).toUpperCase());
+        sb.append(". ");
+        sb.append(alumno.getPersonaFisica().getApellido());
+        sb.append("(");
+        sb.append(alumno.getInstitucion().getDisplayName());
+        sb.append(")");
+        return sb.toString();
     }
     
     @Transient

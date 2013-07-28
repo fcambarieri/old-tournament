@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 OpenIDE-Module: com.tdk.client.config
+OpenIDE-Module-Install: com/tdk/client/config/Installer.class
 OpenIDE-Module-Localizing-Bundle: com/tdk/client/config/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0
 

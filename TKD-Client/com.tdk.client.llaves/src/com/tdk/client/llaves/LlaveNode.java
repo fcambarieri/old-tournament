@@ -28,6 +28,7 @@ import com.tdk.domain.torneo.Competidor;
 import com.tdk.domain.torneo.competencia.EstadoCompetencia;
 import com.tdk.domain.torneo.competencia.TipoEstadoCompetencia;
 
+
 /**
  *
  * @author fernando
@@ -40,14 +41,38 @@ public class LlaveNode extends SwingNode<Llave> {
     }
 
     public String getDisplay() {
-        return getValue().getDisplay();
+//        //getValue().
+//        //return getValue().getDisplay();
+//        StringBuilder sb = new StringBuilder();
+//        Llave llave = getValue();
+//        sb.append(getValue().getTorneo().getNombre());
+//        sb.append(getValue().getCategoria().getDescripcion());
+//        sb.append(getValue().getCinturon());
+//        
+        //return String.format("%s %s %s", llave.getTorneo().getNombre(), llave.getCinturon().getDescripcion());
+         Llave llave = getValue();
+          return String.format("<strong>%s</strong> %s %s ", 
+                  llave.getTorneo().getNombre(),
+                  llave.getCategoria().getDescripcion(),
+                  llave.getCinturon().getDescripcion());
     }
+
+    @Override
+    public String getHtmlDisplayName() {
+        //return super.getHtmlDisplayName(); //To change body of generated methods, choose Tools | Templates.
+          Llave llave = getValue();
+          return String.format("<strong>%s</strong> %s %s ", 
+                  llave.getTorneo().getNombre(),
+                  llave.getCategoria().getDescripcion(),
+                  llave.getCinturon().getDescripcion());
+    }
+    
+    
 
     public Action[] getActions(boolean arg0) {
         return new Action[]{ new EliminarLlaveAction(getValue()) , new ShowLlaveAction(getValue())};
     }
 }
-
 class LlaveNodeChildren extends Children.Keys<Integer> {
 
     private static final Integer TORNEO = new Integer(0);
