@@ -136,9 +136,9 @@
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="pnlCinturones" pref="303" max="32767" attributes="0"/>
+                          <Component id="pnlCinturones" pref="310" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="pnlCategoriaFormas" pref="426" max="32767" attributes="0"/>
+                          <Component id="pnlCategoriaFormas" pref="432" max="32767" attributes="0"/>
                       </Group>
                       <Component id="pnlCategoriaLuchas" max="32767" attributes="0"/>
                   </Group>
@@ -154,7 +154,7 @@
                       <Component id="pnlCategoriaFormas" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="pnlCategoriaLuchas" pref="241" max="32767" attributes="0"/>
+                  <Component id="pnlCategoriaLuchas" pref="251" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

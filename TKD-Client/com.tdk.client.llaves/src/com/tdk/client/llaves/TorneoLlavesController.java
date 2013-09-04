@@ -321,11 +321,24 @@ public class TorneoLlavesController extends SwingController {
                 SwingControllerFactory scf = Lookup.getDefault().lookup(SwingControllerFactory.class);
                 LlavePreviewController controller = scf.createController(LlavePreviewController.class);
                 controller.setCompetidores(child.getCompetidores());
-                controller.showOnTopComponent(String.format("%s %s - %s", child.getRoot().toString(), child.getDisplay(), child.getRoot().getCinturon().getDescripcion()));
+                controller.showOnTopComponent(String.format("Lucha %s %s - %s", child.getRoot().toString(), child.getDisplay(), child.getRoot().getCinturon().getDescripcion()));
 //                LlaveController controller = scf.createController(LlaveController.class);
 //                controller.enableFilters();
 //                controller.initController(child.getCompetidores(), child.getDisplay());
 //                controller.showModal();
+            }
+        } else {
+            if (itemSelected.get() instanceof FormaTreeItem) {
+                FormaTreeItem child = (FormaTreeItem)itemSelected.get();
+                
+                String cinturon = child.getCinturon().getDescripcion();
+                String categoria = child.getCategoria().getDisplay();
+                
+                SwingControllerFactory scf = Lookup.getDefault().lookup(SwingControllerFactory.class);
+                LlavePreviewController controller = scf.createController(LlavePreviewController.class);
+                controller.setCompetidores(child.getCompetidores());
+                controller.showOnTopComponent(String.format("Forma %s %s ", categoria, cinturon));
+                
             }
         }
     }
@@ -365,6 +378,8 @@ abstract class TreeItem {
     public abstract int size();
 
     public abstract void add(Competidor c);
+    
+    public abstract List<Competidor> getCompetidores();
 
     public abstract List<TreeItemChildren> getChildren();
 
@@ -430,6 +445,7 @@ abstract class TreeItem {
     }
 }
 
+
 class FormaTreeItem extends TreeItem {
 
     private FormaTreeItemChildren children = new FormaTreeItemChildren(this);
@@ -451,7 +467,13 @@ class FormaTreeItem extends TreeItem {
     public List<TreeItemChildren> getChildren() {
         return Collections.emptyList();// children;
     }
+
+    @Override
+    public List<Competidor> getCompetidores() {
+        return children.getCompetidores();
+    }
 }
+
 
 class LuchaTreeItem extends TreeItem {
 
@@ -485,6 +507,11 @@ class LuchaTreeItem extends TreeItem {
     @Override
     public List<TreeItemChildren> getChildren() {
         return new ArrayList<TreeItemChildren>(children);//Collections. children;
+    }
+
+    @Override
+    public List<Competidor> getCompetidores() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 
