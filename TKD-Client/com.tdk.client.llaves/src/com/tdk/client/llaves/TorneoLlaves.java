@@ -4,15 +4,12 @@
  */
 package com.tdk.client.llaves;
 
-import com.thorplatform.swing.SwingControllerFactory;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
-import org.openide.windows.WindowManager;
 
 @ActionID(
         category = "File",

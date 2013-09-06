@@ -35,6 +35,7 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
         tbarExpandAndCollapse = new javax.swing.JToolBar();
         btnExpand = new javax.swing.JButton();
         btnCollapse = new javax.swing.JButton();
+        btnAgregarInstituacion = new javax.swing.JButton();
         xtskpnlContainer = new org.jdesktop.swingx.JXTaskPaneContainer();
         tskpnlTorneo = new org.jdesktop.swingx.JXTaskPane();
         jLabel1 = new javax.swing.JLabel();
@@ -54,6 +55,7 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
         btnEditar.setEnabled(false);
 
         btnAgregar.setText(org.openide.util.NbBundle.getMessage(RegistrarCompetidorTorneoForm.class, "RegistrarCompetidorTorneoForm.btnAgregar.text")); // NOI18N
+        btnAgregar.setEnabled(false);
 
         tbarExpandAndCollapse.setFloatable(false);
 
@@ -65,6 +67,9 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
         btnCollapse.setText(org.openide.util.NbBundle.getMessage(RegistrarCompetidorTorneoForm.class, "RegistrarCompetidorTorneoForm.btnCollapse.text")); // NOI18N
         tbarExpandAndCollapse.add(btnCollapse);
 
+        btnAgregarInstituacion.setText(org.openide.util.NbBundle.getMessage(RegistrarCompetidorTorneoForm.class, "RegistrarCompetidorTorneoForm.btnAgregarInstituacion.text")); // NOI18N
+        btnAgregarInstituacion.setEnabled(false);
+
         javax.swing.GroupLayout pnlCompetidoresLayout = new javax.swing.GroupLayout(pnlCompetidores);
         pnlCompetidores.setLayout(pnlCompetidoresLayout);
         pnlCompetidoresLayout.setHorizontalGroup(
@@ -72,10 +77,12 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCompetidoresLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlCompetidoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCompetidoresLayout.createSequentialGroup()
                         .addComponent(tbarExpandAndCollapse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 545, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAgregarInstituacion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditar)
@@ -96,7 +103,8 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
                     .addGroup(pnlCompetidoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnQuitar)
                         .addComponent(btnEditar)
-                        .addComponent(btnAgregar))
+                        .addComponent(btnAgregar)
+                        .addComponent(btnAgregarInstituacion))
                     .addComponent(tbarExpandAndCollapse, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -131,7 +139,7 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -153,7 +161,7 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(xtskpnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 912, Short.MAX_VALUE)
+            .addComponent(xtskpnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addComponent(pnlCompetidores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -170,6 +178,7 @@ public class RegistrarCompetidorTorneoForm extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAgregar;
+    public javax.swing.JButton btnAgregarInstituacion;
     public javax.swing.JButton btnCollapse;
     public javax.swing.JButton btnEditar;
     public javax.swing.JButton btnExpand;

@@ -6,6 +6,7 @@
 package com.tdk.client.api.internal;
 
 import com.tdk.client.api.ServiceFactory;
+import com.tdk.domain.security.Usuario;
 import com.thorplatform.login.LoginClient;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,10 @@ public class ServiceFactoryImp implements ServiceFactory{
             serviceCache.put(className, o);
         }
         return (T) o;
+    }
+
+    public boolean authenticated() {
+       return loginClient.getOperador(Usuario.class) != null;
     }
 
 }

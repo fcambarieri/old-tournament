@@ -37,8 +37,6 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
@@ -218,8 +216,19 @@ public class RegistrarCompetidorTorneoController extends SwingController {
                 }
             }
         });
+        form.btnAgregarInstituacion.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                agregarInsitucionAlTorneo();
+            }
+        });
+    }
 
-
+    private void agregarInsitucionAlTorneo() {
+        if (getTorneo() != null){
+            AgregarInstitucionTorneoAction action = new AgregarInstitucionTorneoAction(getTorneo());
+            action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "agregarInstitucion"));
+        }
+        
     }
 
     private void agregarCompetidor() {
@@ -231,18 +240,6 @@ public class RegistrarCompetidorTorneoController extends SwingController {
             if (controller.showModal()) {
                 agregarCompetidor(controller.getCompetidorCreado());
             }
-//            boolean error = true;
-//            while (error && controller.showModal()) {
-//                try {
-//                    Competidor competidor = controller.crearCompetidor();
-//                    competidor = getTorneoService().crearCompetidor(competidor);
-//                    agregarCompetidor(competidor);
-//
-//                    error = false;
-//                } catch (Throwable ex) {
-//                    getGuiUtils().warnnig(ex, TDKServerException.class);
-//                }
-//            }
         } else {
             getGuiUtils().warnnig("Seleccione un torneo <B>ACTIVO</B>");
         }
@@ -283,11 +280,21 @@ public class RegistrarCompetidorTorneoController extends SwingController {
 
     @Override
     protected void onPresentationModelChange(PropertyChangeEvent evt) {
-        if (evt.getSource() == torneoSelected && torneoSelected.get() != null) {
-            listarInstitucionCompatidores("%");
-        } else if (evt.getPropertyName() == "competidor") {
+        if (evt.getSource() == torneoSelected) {
+            boolean selected = torneoSelected.get() != null;
+            if (selected) {
+                 listarInstitucionCompatidores("%");
+            }
+           form.btnAgregarInstituacion.setEnabled(selected);
+        } else if ("competidor".equals(evt.getPropertyName())) {
             setEnabledBotonesDeEdicion(competidorSelected.get() != null);
-        }
+        } else if (evt.getSource() == institucionSelected) {
+            setEnabledAgregarButton(institucionSelected.get() != null);
+        } 
+    }
+
+    private void setEnabledAgregarButton(boolean enabled) {
+        form.btnAgregar.setEnabled(enabled);
     }
 
     private void setEnabledBotonesDeEdicion(boolean enabled) {

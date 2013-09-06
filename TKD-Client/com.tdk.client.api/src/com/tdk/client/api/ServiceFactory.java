@@ -13,4 +13,6 @@ public interface ServiceFactory {
     
     <T> T getService(Class<T> className);
     
+    boolean authenticated();
+    
 }

@@ -5,7 +5,6 @@
 package com.tdk.client.llaves;
 
 import com.tdk.client.api.ServiceFactory;
-import com.tdk.domain.Institucion;
 import com.tdk.domain.torneo.Categoria;
 import com.tdk.domain.torneo.CategoriaForma;
 import com.tdk.domain.torneo.CategoriaLucha;
@@ -25,6 +24,7 @@ import com.thorplatform.swing.SwingController;
 import com.thorplatform.swing.SwingControllerFactory;
 import com.thorplatform.swing.actions.NotifierSwingActionListener;
 import com.thorplatform.swing.actions.SwingActionListener;
+import com.thorplatform.swing.table.SwingTableController;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -38,9 +38,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.swing.AbstractCellEditor;
-import javax.swing.CellEditor;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -52,13 +52,10 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.DefaultTableCellRenderer.UIResource;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.swingx.decorator.AlternateRowHighlighter;
@@ -67,7 +64,6 @@ import org.jdesktop.swingx.decorator.HighlighterPipeline;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
-import org.openide.util.Utilities;
 
 /**
  *
@@ -112,6 +108,25 @@ public class TorneoLlavesController extends SwingController {
                 bracketPreview();
             }
         });
+
+        form.btnRefresh.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                refresh();
+            }
+        });
+
+
+        form.btnCrearLlaves.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                crearLlave();
+            }
+        });
+        form.btnLonelyCompetidors.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showLonelyCompetidores();
+            }
+        });
+
         ///tree
 
         //final ImageIcon competidorIcon = new ImageIcon(Utilities.loadImage("com/tdk/client/personas/institucion/alumnos-16x16.png"));
@@ -243,6 +258,41 @@ public class TorneoLlavesController extends SwingController {
         getSwingBinder().bindTreeTableMap(form.xtbCompetencias, categoriasXCompetidores, itemSelected, competidorSelected, TreeItem.class, TreeItemChildren.class);
     }
 
+    private void crearLlave() {
+        Cinturon cinturon = null;
+        Categoria categoria = null;
+        Torneo torneo = null;
+        if (competidorSelected.get() != null) {
+            TreeItemChildren child = competidorSelected.get();
+            if (child.getCompetidores().size() > 1) {
+                Competidor c = child.getCompetidores().get(0);
+                torneo = c.getTorneo();
+                categoria = c.getCompetidorCategoriaLucha().getPeso().getCategoriaLucha();
+                cinturon = c.getCinturon();
+            }
+        } else {
+            if (itemSelected.get() instanceof FormaTreeItem) {
+                FormaTreeItem child = (FormaTreeItem) itemSelected.get();
+                if (!child.getCompetidores().isEmpty()) {
+                    Competidor c = child.getCompetidores().get(0);
+                    torneo = c.getTorneo();
+                    categoria = c.getCompetidorCategoriaForma().getCategoriaForma();
+                    cinturon = c.getCinturon();
+                }
+
+            }
+        }
+        if (cinturon != null && categoria != null && torneo != null) {
+            if (categoria instanceof CategoriaLucha) {
+                competenciaService.crearLlaveLucha(cinturon, (CategoriaLucha) categoria, torneo);
+            } else {
+                competenciaService.crearLlaveForma(cinturon, (CategoriaForma) categoria, torneo);
+            }
+
+        }
+
+    }
+
     private void configureValidators() {
         getSwingValidator().setJLabel(form.lblMessage);
 //        getSwingValidator().addSwingValidator(new RequiredPropertyValidator(torneoSelected, "Seleccione un torneo"));
@@ -257,8 +307,18 @@ public class TorneoLlavesController extends SwingController {
 
     @Override
     protected void onPresentationModelChange(PropertyChangeEvent evt) {
-        if (evt.getSource() == torneoSelected && torneoSelected.get() != null) {
-            fillTreeItem();
+        if (evt.getSource() == torneoSelected ) {
+            if (torneoSelected.get() != null) {
+                 fillTreeItem();
+            }
+            form.btnLonelyCompetidors.setEnabled(torneoSelected.get() != null);
+           
+        } else if (evt.getSource() == competidorSelected && competidorSelected.get() != null) {
+            form.btnPreVisualizar.setEnabled(competidorSelected.get().getCompetidores().size() > 1);
+            form.btnCrearLlaves.setEnabled(competidorSelected.get().getCompetidores().size() > 1);
+        } else if (evt.getSource() == itemSelected && itemSelected.get() != null) {
+            form.btnPreVisualizar.setEnabled(itemSelected.get().getCompetidores().size() > 1);
+            form.btnCrearLlaves.setEnabled(itemSelected.get().getCompetidores().size() > 1);
         }
     }
 
@@ -284,8 +344,39 @@ public class TorneoLlavesController extends SwingController {
                 }
             }
         });
+    }
+
+    private void showLonelyCompetidores() {
+
+        if (torneoSelected.get() != null) {
+            List<Competidor> competidores = filterLonelyCompetidores();
+            SwingControllerFactory scf = Lookup.getDefault().lookup(SwingControllerFactory.class);
+            LonelyCompetidorsController controller = scf.createController(LonelyCompetidorsController.class);
+            controller.setTitle("Competidores sin rivales");
+            controller.setCompetidores(competidores);
+            controller.showModal();
+        }
+
+    }
+
+    private void refresh() {
+        ServiceFactory sf = Lookup.getDefault().lookup(ServiceFactory.class);
+        if (sf.authenticated()) {
+            torneoSelected.set(null);
+            cinturonSelected.set(null);
+            categoriaFormaSelected.set(null);
+            categoriaLuchaSelected.set(null);
 
 
+
+            torneoService = sf.getService(TorneoServiceRemote.class);
+            competenciaService = sf.getService(CompetenciaServiceRemote.class);
+
+            torneos.assignData(torneoService.listarTorneos("%"));
+            cinturones.assignData(torneoService.listarCinturones("%"));
+            categoriaLuchas.assignData(torneoService.listarCategoriasLucha("%"));
+            categoriaFormas.assignData(torneoService.listarCategoriasForma("%"));
+        }
     }
 
     private void fillTreeItem() {
@@ -311,7 +402,41 @@ public class TorneoLlavesController extends SwingController {
             }
             categoriasXCompetidores.setMap(competidoreRegistrados);
         }
+    }
 
+    private List<Competidor> filterLonelyCompetidores() {
+        if (torneoSelected.get() != null) {
+            Set<TreeItem> treeItems = categoriasXCompetidores.getKeys();
+            //List<TreeItem> treeItems = new LinkedList<TreeItem>();
+//            List<Competidor> competidores = torneoService.listarCompetidoresPorTorneo(torneoSelected.get().getId(), "%");
+//            if (competidores != null && !competidores.isEmpty()) {
+//                Iterator<Competidor> it = competidores.iterator();
+//                while (it.hasNext()) {
+//                    Competidor c = it.next();
+//                    if (c.getCompetidorCategoriaForma() != null) {
+//                        addTreeItem(treeItems, c, c.getCompetidorCategoriaForma().getCategoriaForma(), null);
+//                    }
+//                    if (c.getCompetidorCategoriaLucha() != null) {
+//                        addTreeItem(treeItems, c, c.getCompetidorCategoriaLucha().getPeso().getCategoriaLucha(), c.getCompetidorCategoriaLucha().getPeso());
+//                    }
+//                }
+//            }
+            List<Competidor> filtered = new LinkedList<Competidor>();
+            for (TreeItem ti : treeItems) {
+                if (ti.isLeaf() && ti.getCompetidores().size() == 1) {
+                    filtered.addAll(ti.getCompetidores());
+                } else if (!ti.isLeaf()) {
+                    for (TreeItemChildren child : ti.getChildren()) {
+                        if (child.getCompetidores().size() == 1) {
+                            filtered.addAll(child.getCompetidores());
+                        }
+                    }
+                }
+            }
+
+            return filtered;
+        }
+        return null;
     }
 
     private void bracketPreview() {
@@ -322,23 +447,20 @@ public class TorneoLlavesController extends SwingController {
                 LlavePreviewController controller = scf.createController(LlavePreviewController.class);
                 controller.setCompetidores(child.getCompetidores());
                 controller.showOnTopComponent(String.format("Lucha %s %s - %s", child.getRoot().toString(), child.getDisplay(), child.getRoot().getCinturon().getDescripcion()));
-//                LlaveController controller = scf.createController(LlaveController.class);
-//                controller.enableFilters();
-//                controller.initController(child.getCompetidores(), child.getDisplay());
-//                controller.showModal();
+
             }
         } else {
             if (itemSelected.get() instanceof FormaTreeItem) {
-                FormaTreeItem child = (FormaTreeItem)itemSelected.get();
-                
+                FormaTreeItem child = (FormaTreeItem) itemSelected.get();
+
                 String cinturon = child.getCinturon().getDescripcion();
                 String categoria = child.getCategoria().getDisplay();
-                
+
                 SwingControllerFactory scf = Lookup.getDefault().lookup(SwingControllerFactory.class);
                 LlavePreviewController controller = scf.createController(LlavePreviewController.class);
                 controller.setCompetidores(child.getCompetidores());
                 controller.showOnTopComponent(String.format("Forma %s %s ", categoria, cinturon));
-                
+
             }
         }
     }
@@ -378,10 +500,12 @@ abstract class TreeItem {
     public abstract int size();
 
     public abstract void add(Competidor c);
-    
+
     public abstract List<Competidor> getCompetidores();
 
     public abstract List<TreeItemChildren> getChildren();
+
+    public abstract boolean isLeaf();
 
     public Torneo getTorneo() {
         return torneo;
@@ -445,7 +569,6 @@ abstract class TreeItem {
     }
 }
 
-
 class FormaTreeItem extends TreeItem {
 
     private FormaTreeItemChildren children = new FormaTreeItemChildren(this);
@@ -472,8 +595,12 @@ class FormaTreeItem extends TreeItem {
     public List<Competidor> getCompetidores() {
         return children.getCompetidores();
     }
-}
 
+    @Override
+    public boolean isLeaf() {
+        return true;
+    }
+}
 
 class LuchaTreeItem extends TreeItem {
 
@@ -498,7 +625,7 @@ class LuchaTreeItem extends TreeItem {
             }
         }
         if (newList) {
-            LuchaTreeItemChildren child = new LuchaTreeItemChildren(this,c.getCompetidorCategoriaLucha().getPeso(), new ArrayList<Competidor>());
+            LuchaTreeItemChildren child = new LuchaTreeItemChildren(this, c.getCompetidorCategoriaLucha().getPeso(), new ArrayList<Competidor>());
             child.getCompetidores().add(c);
             children.add(child);
         }
@@ -511,7 +638,12 @@ class LuchaTreeItem extends TreeItem {
 
     @Override
     public List<Competidor> getCompetidores() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return false;
     }
 }
 
@@ -524,12 +656,11 @@ interface TreeItemChildren {
     boolean isImprimir();
 
     void setImprimir(boolean b);
-    
+
     List<Competidor> getCompetidores();
-    
+
     TreeItem getRoot();
 }
-
 
 class FormaTreeItemChildren implements TreeItemChildren {
 
@@ -582,7 +713,6 @@ class FormaTreeItemChildren implements TreeItemChildren {
         return root;
     }
 }
-
 
 class LuchaTreeItemChildren implements TreeItemChildren {
 

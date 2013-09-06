@@ -55,7 +55,7 @@ class TipoCategoriaNodeChildren extends Children.Keys {
         if (torneo != null) {
             categorias = new ArrayList<Integer>();
             categorias.add(CATEGORIA_FORMA);
-            //categorias.add(CATEGORIA_LUCHA);
+            categorias.add(CATEGORIA_LUCHA);
             setKeys(categorias);
         }
      }
@@ -67,6 +67,7 @@ class TipoCategoriaNodeChildren extends Children.Keys {
         if (key.equals(CATEGORIA_FORMA)) {
             node = new TipoCategoriaNode("Forma", "com/tdk/client/torneos/formas-16x16.png", new CategoriaFormaNodeChildren(torneo), torneo);
         } else if (key.equals(CATEGORIA_LUCHA)) {
+           node = new TipoCategoriaNode("Lucha", "com/tdk/client/torneos/combate-16x16.png", new CategoriaFormaNodeChildren(torneo), torneo);
         }
 
         return new Node[]{node};
@@ -116,6 +117,29 @@ class CategoriaFormaNodeChildren extends Children.Keys {
     }
 }
 
+class CategoriaLuchaNodeChildren extends Children.Keys {
+
+    private Torneo torneo;
+
+    public CategoriaLuchaNodeChildren(Torneo torneo) {
+        this.torneo = torneo;
+    }
+
+    @Override
+    protected void addNotify() {
+        super.addNotify();
+        setKeys(getTorneoService().listarCategoriasLucha("%"));
+    }
+    
+    @Override
+    protected Node[] createNodes(Object t) {
+        return new Node[] {new CategoriaNode((Categoria)t, torneo)};
+    }
+ 
+    public TorneoServiceRemote getTorneoService() {
+        return Lookup.getDefault().lookup(ServiceFactory.class).getService(TorneoServiceRemote.class);
+    }
+}
 
 class CategoriaNode extends AbstractNode {
 

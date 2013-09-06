@@ -4,6 +4,7 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -15,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="xtskpnlContainer" alignment="0" pref="912" max="32767" attributes="0"/>
+          <Component id="xtskpnlContainer" alignment="0" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace min="12" pref="12" max="12" attributes="0"/>
               <Component id="pnlCompetidores" max="32767" attributes="0"/>
@@ -52,10 +53,12 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jScrollPane1" alignment="0" pref="866" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="tbarExpandAndCollapse" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="545" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="btnAgregarInstituacion" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnAgregar" linkSize="2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnEditar" linkSize="2" min="-2" max="-2" attributes="0"/>
@@ -78,6 +81,7 @@
                           <Component id="btnQuitar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEditar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnAgregar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAgregarInstituacion" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="tbarExpandAndCollapse" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
@@ -119,6 +123,7 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/tdk/client/torneos/Bundle.properties" key="RegistrarCompetidorTorneoForm.btnAgregar.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JToolBar" name="tbarExpandAndCollapse">
@@ -150,6 +155,14 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="btnAgregarInstituacion">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/tdk/client/torneos/Bundle.properties" key="RegistrarCompetidorTorneoForm.btnAgregarInstituacion.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="org.jdesktop.swingx.JXTaskPaneContainer" name="xtskpnlContainer">
@@ -186,7 +199,7 @@
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtBuscar" min="-2" pref="347" max="-2" attributes="0"/>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <EmptySpace pref="62" max="32767" attributes="0"/>
                       <Component id="btnLimpiar" min="-2" pref="101" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -254,6 +267,66 @@
           </SubComponents>
         </Container>
       </SubComponents>
+      <LayoutCode>
+        <CodeStatement>
+          <CodeExpression id="1_verticalLayout1">
+            <CodeVariable name="verticalLayout1" type="4096" declaredType="org.jdesktop.swingx.VerticalLayout"/>
+            <ExpressionOrigin>
+              <ExpressionProvider type="CodeConstructor">
+                <CodeConstructor class="org.jdesktop.swingx.VerticalLayout" parameterTypes=""/>
+              </ExpressionProvider>
+            </ExpressionOrigin>
+          </CodeExpression>
+          <StatementProvider type="CodeExpression">
+            <CodeExpression id="1_verticalLayout1"/>
+          </StatementProvider>
+        </CodeStatement>
+        <CodeStatement>
+          <CodeExpression id="1_verticalLayout1"/>
+          <StatementProvider type="CodeMethod">
+            <CodeMethod name="setGap" class="org.jdesktop.swingx.VerticalLayout" parameterTypes="int"/>
+          </StatementProvider>
+          <Parameters>
+            <CodeExpression id="2">
+              <ExpressionOrigin>
+                <Value type="int" value="14"/>
+              </ExpressionOrigin>
+            </CodeExpression>
+          </Parameters>
+        </CodeStatement>
+        <CodeStatement>
+          <CodeExpression id="3_xtskpnlContainer">
+            <CodeVariable name="xtskpnlContainer" type="8193" declaredType="org.jdesktop.swingx.JXTaskPaneContainer"/>
+            <ExpressionOrigin>
+              <ExpressionProvider type="ComponentRef">
+                <ComponentRef name="xtskpnlContainer"/>
+              </ExpressionProvider>
+            </ExpressionOrigin>
+          </CodeExpression>
+          <StatementProvider type="CodeMethod">
+            <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+          </StatementProvider>
+          <Parameters>
+            <CodeExpression id="1_verticalLayout1"/>
+          </Parameters>
+        </CodeStatement>
+        <CodeStatement>
+          <CodeExpression id="3_xtskpnlContainer"/>
+          <StatementProvider type="CodeMethod">
+            <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
+          </StatementProvider>
+          <Parameters>
+            <CodeExpression id="4_tskpnlTorneo">
+              <CodeVariable name="tskpnlTorneo" type="8193" declaredType="org.jdesktop.swingx.JXTaskPane"/>
+              <ExpressionOrigin>
+                <ExpressionProvider type="ComponentRef">
+                  <ComponentRef name="tskpnlTorneo"/>
+                </ExpressionProvider>
+              </ExpressionOrigin>
+            </CodeExpression>
+          </Parameters>
+        </CodeStatement>
+      </LayoutCode>
     </Container>
   </SubComponents>
 </Form>

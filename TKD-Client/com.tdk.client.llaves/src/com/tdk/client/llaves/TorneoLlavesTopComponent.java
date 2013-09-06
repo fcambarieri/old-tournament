@@ -30,8 +30,8 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "TorneoLlavesTopComponent")
 @Messages({
     "CTL_TorneoLlavesAction=TorneoLlaves",
-    "CTL_TorneoLlavesTopComponent=TorneoLlaves Window",
-    "HINT_TorneoLlavesTopComponent=This is a TorneoLlaves window"
+    "CTL_TorneoLlavesTopComponent=Llaves del torneo",
+    "HINT_TorneoLlavesTopComponent=Llaves del torneo"
 })
 public final class TorneoLlavesTopComponent extends TopComponent {
     private static TorneoLlavesTopComponent instance = new TorneoLlavesTopComponent();

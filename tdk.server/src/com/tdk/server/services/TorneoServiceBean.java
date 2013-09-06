@@ -631,6 +631,6 @@ public class TorneoServiceBean extends JPAService implements TorneoServiceRemote
         query.setParameter("edad", edad);
         return query.getResultList();
     }
-    
+
     
 }

@@ -33,6 +33,7 @@
             <file name="com-tdk-client-torneos-TorneosAction.instance"/>
             <file name="com-tdk-client-llaves-OrganimgramaAction.instance"/>
             <file name="com-tdk-client-llaves-LlavesAction.instance"/>
+            <file name="com-tdk-client-llaves-LlaveTorneoAction.instance"/>
         </folder>
         
         <folder name="Herramientas"> 
