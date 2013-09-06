@@ -29,11 +29,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +48,9 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
@@ -62,6 +68,7 @@ import org.jdesktop.swingx.decorator.AlternateRowHighlighter;
 import org.jdesktop.swingx.decorator.Highlighter;
 import org.jdesktop.swingx.decorator.HighlighterPipeline;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 
@@ -124,6 +131,27 @@ public class TorneoLlavesController extends SwingController {
         form.btnLonelyCompetidors.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showLonelyCompetidores();
+            }
+        });
+
+        form.xtbCompetencias.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent me) {
+                if (me.getButton() == MouseEvent.BUTTON2 || me.getButton() == MouseEvent.BUTTON3) {
+                    JPopupMenu menu = new JPopupMenu();
+                    JMenuItem item = new JMenuItem("Imprimir");
+                    item.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                form.xtbCompetencias.print();
+                            } catch (PrinterException ex) {
+                                Exceptions.printStackTrace(ex);
+                            }
+                        }
+                    });
+                    menu.add(item);
+                    menu.setVisible(true);
+                }
             }
         });
 
@@ -307,12 +335,12 @@ public class TorneoLlavesController extends SwingController {
 
     @Override
     protected void onPresentationModelChange(PropertyChangeEvent evt) {
-        if (evt.getSource() == torneoSelected ) {
+        if (evt.getSource() == torneoSelected) {
             if (torneoSelected.get() != null) {
-                 fillTreeItem();
+                fillTreeItem();
             }
             form.btnLonelyCompetidors.setEnabled(torneoSelected.get() != null);
-           
+
         } else if (evt.getSource() == competidorSelected && competidorSelected.get() != null) {
             form.btnPreVisualizar.setEnabled(competidorSelected.get().getCompetidores().size() > 1);
             form.btnCrearLlaves.setEnabled(competidorSelected.get().getCompetidores().size() > 1);
@@ -421,7 +449,7 @@ public class TorneoLlavesController extends SwingController {
 //                    }
 //                }
 //            }
-            List<Competidor> filtered = new LinkedList<Competidor>();
+            Set<Competidor> filtered = new HashSet<Competidor>();
             for (TreeItem ti : treeItems) {
                 if (ti.isLeaf() && ti.getCompetidores().size() == 1) {
                     filtered.addAll(ti.getCompetidores());
@@ -433,8 +461,13 @@ public class TorneoLlavesController extends SwingController {
                     }
                 }
             }
+            List<Competidor> competidores = new LinkedList<Competidor>();
+            for(Competidor c : filtered) {
+                competidores.add(c);
+            }
+                    
 
-            return filtered;
+            return competidores;
         }
         return null;
     }
