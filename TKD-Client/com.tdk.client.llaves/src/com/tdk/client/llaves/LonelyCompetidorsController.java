@@ -54,11 +54,11 @@ public class LonelyCompetidorsController extends SwingModalController
     }
 
     private void configureView() {
-        this.listTableModel = configureTable();
+        //this.listTableModel = configureTable();
         
-//        HighlighterPipeline highlighter = new HighlighterPipeline(new Highlighter[]{AlternateRowHighlighter.quickSilver});
-//        form.xtbCompetidores.setHighlighters(highlighter);
-        form.xtbCompetidores.setModel(listTableModel);
+        HighlighterPipeline highlighter = new HighlighterPipeline(new Highlighter[]{AlternateRowHighlighter.quickSilver});
+        form.xtbCompetidores.setHighlighters(highlighter);
+        form.xtbCompetidores.setModel( configureTable());
 
     }
 
@@ -70,7 +70,7 @@ public class LonelyCompetidorsController extends SwingModalController
     protected ListTableModel<Competidor> configureTable() {
         final ListTableModel<Competidor> model = new ListTableModel<Competidor>();
         model.setColumnTitles(new String[]{"Insitución", "Competidor", "Sexo", "Cinturon", "Categoria Forma", "Categoria Lucha"});
-        model.setColumnClasses(new Class[]{String.class,String.class,String.class,String.class,String.class, });
+        model.setColumnClasses(new Class[]{String.class,String.class,String.class,String.class,String.class,String.class });
         model.setCellValueProvider(new ListTableModel.CellValueProvider() {
 
             public Object getCellValue(int i, int i1) {
